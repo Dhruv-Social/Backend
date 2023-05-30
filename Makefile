@@ -2,7 +2,7 @@ dev:
 	@npm run dev
 
 clean:
-	rm -rf build/
+	rm -rf dist/
 
 _build:
 	@rm -rf ./build
