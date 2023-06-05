@@ -1,9 +1,11 @@
 import express, { Request, Response, Application } from "express";
-require("dotenv").config();
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app: Application = express();
-let port: number = parseInt(process.env.API_PORT!);
-let devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
+const port: number = parseInt(process.env.API_PORT!);
+const devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
 
 app.all("*", async (req: Request, res: Response) => {
   return res.send({

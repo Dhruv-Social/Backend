@@ -11,3 +11,6 @@ _build:
 prod:
 	@make _build
 	node build/index.js
+
+lint:
+	npx eslint src/
