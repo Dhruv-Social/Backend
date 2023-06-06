@@ -1,12 +1,15 @@
 import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
 
+import { PrismaClient } from "@prisma/client";
+
 dotenv.config();
 
 const app: Application = express();
 const port: number = parseInt(process.env.API_PORT!);
 const devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
 
+// Fallback
 app.all("*", async (req: Request, res: Response) => {
   return res.send({
     detail: "This endpoint does not exist.",
