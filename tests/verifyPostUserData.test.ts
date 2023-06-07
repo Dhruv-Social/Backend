@@ -15,7 +15,7 @@ let inCorrectPassword = "NO WAY IS THAT RICK ASTLEY";
 let correctCity = "auckland";
 let inCorrectCity = "no way among us";
 
-let verifyUsername = (username: string): boolean => {
+let test_verifyUsername = (username: string): boolean => {
   if (!/^[A-Za-z0-9]*$/.test(username)) {
     return false;
   }
@@ -23,7 +23,7 @@ let verifyUsername = (username: string): boolean => {
   return true;
 };
 
-let verifyPassword = (password: string): boolean => {
+let test_verifyPassword = (password: string): boolean => {
   if (password.length < 7) {
     return false;
   }
@@ -35,7 +35,7 @@ let verifyPassword = (password: string): boolean => {
   return true;
 };
 
-let verifyLocation = (city: string): boolean => {
+let test_verifyLocation = (city: string): boolean => {
   const cities = [
     "Auckland",
     "Christchurch",
@@ -64,5 +64,3 @@ let verifyLocation = (city: string): boolean => {
       city.toLocaleLowerCase().slice(1)
   );
 };
-
-console.log(verifyUsername(inCorrectUsername));
