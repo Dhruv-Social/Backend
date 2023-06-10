@@ -5,6 +5,5 @@ let autoDeleteUsers = async () => {
 
   deleteUsers();
 };
-//e
 
 export { autoDeleteUsers };
