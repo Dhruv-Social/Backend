@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.2.5",
+    "@types/nodemailer": "^6.4.8",
     "@types/pg": "^8.10.1",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
@@ -26,9 +27,16 @@
   "dependencies": {
     "@prisma/client": "^4.15.0",
     "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
     "argon2": "^0.30.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "pg": "^8.11.0"
+    "express-fileupload": "^1.4.0",
+    "jsonwebtoken": "^9.0.0",
+    "magic-regexp": "^0.7.0",
+    "nodemailer": "^6.9.3",
+    "pg": "^8.11.0",
+    "threads": "^1.7.0",
+    "tiny-worker": "^2.3.0"
   }
 }
