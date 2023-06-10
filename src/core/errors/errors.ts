@@ -58,4 +58,14 @@ export class PostErrors extends Errors {
       },
     };
   }
+
+  static postUserEmailSendError() {
+    return {
+      success: false,
+      details: {
+        reason: "Unknown error when sending email",
+        errorCode: 400,
+      },
+    };
+  }
 }
