@@ -11,27 +11,28 @@ datasource db {
 }
 
 model User {
-  uuid          String      @id @unique
-  username      String      @unique
-  display_name  String
-  firstname     String 
-  lastname      String
-  email         String
-  phonenumber   String
-  password      String
-  description   String 
-  location      String
-  followers     Json[]
-  following     Json[]
-  verified      Boolean     @default(false)
-  posts         String[]
-  profilePicure String
-  banner        String
+  uuid            String      @id @unique
+  username        String      @unique
+  display_name    String
+  firstname       String 
+  lastname        String
+  email           String
+  phonenumber     String
+  password        String
+  description     String 
+  location        String
+  followers       Json[]
+  following       Json[]
+  verified        Boolean     @default(false)
+  posts           String[]
+  profilePicture  String
+  banner          String
+  creationDate    BigInt
 }
 
 model Post {
-  post_uuid     String      @id @unique
-  author_uuid   String
-  likes         Json[]
-  comments      Json[]
+  post_uuid       String      @id @unique
+  author_uuid     String
+  likes           Json[]
+  comments        Json[]
 }
