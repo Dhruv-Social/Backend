@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
-import { PrismaClient } from "@prisma/client";
 
 import { Errors } from "../../core/errors/errors";
+import { prisma } from "../../core/prisma/prisma";
 
 const getSpecificUserRoute: Router = express.Router();
 
@@ -15,8 +15,6 @@ getSpecificUserRoute.get("/", async (req: Request, res: Response) => {
       .status(Errors.didNotProvideUsername().details.errorCode)
       .send(Errors.didNotProvideUsername());
   }
-
-  const prisma = new PrismaClient();
 
   const user = await prisma.user.findUnique({
     where: {
