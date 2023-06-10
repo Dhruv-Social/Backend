@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import { PrismaClient } from "@prisma/client";
+
 import { Errors } from "../../core/errors/errors";
 
 const getSpecificUserRoute: Router = express.Router();
