@@ -1,3 +1,8 @@
+/*
+  This file will post a user to the database and send 
+  them a verification email
+*/
+
 import express, { Request, Response, Router } from "express";
 const fileUpload = require("express-fileupload");
 import crypto from "crypto";
