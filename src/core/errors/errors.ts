@@ -68,4 +68,14 @@ export class PostErrors extends Errors {
       },
     };
   }
+
+  static postUserUserWithUsernameExists() {
+    return {
+      success: false,
+      details: {
+        reason: "User with that username already exists",
+        errorCode: 400,
+      },
+    };
+  }
 }

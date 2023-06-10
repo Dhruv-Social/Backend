@@ -34,6 +34,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
   const profilePicture = req.files.profilePicture.data.toString("base64");
   const banner = req.files.banner.data.toString("base64");
 
+  // Here we verifying the data, if it is not correct then we return an error to the user.w
   const arr: string[] = [
     username,
     display_name,
@@ -70,8 +71,9 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
       .send(PostErrors.postUserLocationFailed());
   }
 
+  // Creating a user object
   const user: IUser = {
-    uuid: "e",
+    uuid: crypto.randomUUID(),
     username: username,
     display_name: display_name,
     firstname: firstname,
@@ -89,6 +91,19 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     banner: banner,
     creationDate: Date.now(),
   };
+
+  // Checking to make sure the the user with that username does exist, if so, we return an error
+  let prismaReturn = await prisma.user.findUnique({
+    where: {
+      username: user.username,
+    },
+  });
+
+  if (prismaReturn !== null) {
+    return res
+      .status(PostErrors.postUserUserWithUsernameExists().details.errorCode)
+      .send(PostErrors.postUserUserWithUsernameExists());
+  }
 
   let createTokenData: IPostToken = {
     uuid: user.uuid,
@@ -111,6 +126,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     text: postUserToken,
   };
 
+  // Posting the user to the database
   await prisma.user.create({
     data: {
       uuid: user.uuid,
