@@ -8,17 +8,17 @@ const fileUpload = require("express-fileupload");
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 
-import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { PostErrors } from "../../core/errors/errors";
-import { hashPassword } from "../../core/argon2/argon";
+import { verifyArray } from "../../../core/verifyArray/verifyArray";
+import { PostErrors } from "../../../core/errors/errors";
+import { hashPassword } from "../../../core/argon2/argon";
 import {
   verifyUsername,
   verifyPassword,
   verifyLocation,
-} from "../../core/verifyArray/postUserVerify";
-import { createToken } from "../../core/jwt/jwt";
-import { IUser, IPostToken } from "../../core/data/interfaces";
-import { prisma } from "../../core/prisma/prisma";
+} from "../../../core/verifyArray/postUserVerify";
+import { createToken } from "../../../core/jwt/jwt";
+import { IUser, IPostToken } from "../../../core/data/interfaces";
+import { prisma } from "../../../core/prisma/prisma";
 
 const postUser: Router = express.Router();
 

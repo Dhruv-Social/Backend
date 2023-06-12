@@ -10,7 +10,7 @@ dotenv.config();
 import getSpecificUserRoute from "./routes/get/getSpecificUser";
 
 // Post
-import postUser from "./routes/post/postUser";
+import postUser from "./routes/post/createUser/postUser";
 import verifyUser from "./routes/post/verifyUser";
 
 const app: Application = express();
