@@ -21,3 +21,28 @@ export interface IUser {
 export interface IPostToken {
   uuid: string;
 }
+
+export interface ITokenPayload {
+  uuid: string;
+  scopes: ITokenPayloadScopes;
+}
+
+export interface ITokenPayloadScopes {
+  // Dhruv Scopes
+  dhruv_canUpdateUsers: boolean;
+  dhruv_canDeleteUsers: boolean;
+  dhruv_canGod: boolean;
+  // Basic Scopes
+  canEditSelf: boolean;
+  canMakePost: boolean;
+  canCreateUser: boolean;
+  canSendMessages: boolean;
+  canUserFetchSelf: boolean;
+  canReadOtherProfiles: boolean;
+  canDeleteSelf: boolean;
+}
+
+export interface IUserLogin {
+  username: string;
+  password: string;
+}
