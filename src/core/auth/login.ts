@@ -27,7 +27,7 @@ const scopes: ITokenPayloadScopes = {
   canDeleteSelf: true,
 };
 
-loginAuth.post("/", async (req: Request, res: Response) => {
+loginAuth.post("/", async (req: Request | any, res: Response) => {
   const { username, password } = req.body;
 
   const arr: string[] = [username, password];
