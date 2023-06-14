@@ -12,6 +12,32 @@ export class Errors {
   }
 }
 
+export class GetErrors extends Errors {
+  private constructor() {
+    super();
+  }
+
+  static getUserDidNotProvideDetails() {
+    return {
+      success: false,
+      details: {
+        reason: "An item was null or undefined, try proving all the items",
+        errorCode: 400,
+      },
+    };
+  }
+
+  static getUserDoesNotExist() {
+    return {
+      success: false,
+      details: {
+        reason: "This user does not exist",
+        errorCode: 400,
+      },
+    };
+  }
+}
+
 export class PostErrors extends Errors {
   private constructor() {
     super();
