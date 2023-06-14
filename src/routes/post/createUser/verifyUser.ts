@@ -6,9 +6,9 @@
 import express, { Request, Response, Router } from "express";
 import nodemailer from "nodemailer";
 
-import { decryptToken } from "../../core/jwt/jwt";
-import { prisma } from "../../core/prisma/prisma";
-import { PostErrors } from "../../core/errors/errors";
+import { decryptToken } from "../../../core/jwt/jwt";
+import { prisma } from "../../../core/prisma/prisma";
+import { PostErrors } from "../../../core/errors/errors";
 
 const verifyUser: Router = express.Router();
 
