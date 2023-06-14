@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express-fileupload": "^1.4.1",
     "@types/node": "^20.2.5",
     "@types/nodemailer": "^6.4.8",
     "@types/pg": "^8.10.1",
