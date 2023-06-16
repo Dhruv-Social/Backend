@@ -10,6 +10,32 @@ export class Errors {
       },
     };
   }
+
+  static didNotProvideDetails() {
+    return {
+      success: false,
+      details: {
+        reason: "An item was null or undefined, try proving all the items",
+        errorCode: 400,
+      },
+    };
+  }
+}
+
+export class DeleteErrors extends Errors {
+  private constructor() {
+    super();
+  }
+
+  static deletePostPostDoesNotExist() {
+    return {
+      success: false,
+      details: {
+        reason: "The post uuid you specified does not exist",
+        errorCode: 400,
+      },
+    };
+  }
 }
 
 export class GetErrors extends Errors {

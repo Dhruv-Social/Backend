@@ -19,6 +19,9 @@ import verifyUser from "./routes/post/createUser/verifyUser";
 
 import createPost from "./routes/post/makePost/createPost";
 
+// Delete
+import deletePost from "./routes/delete/deletePost";
+
 const app: Application = express();
 const port: number = parseInt(process.env.API_PORT!);
 const devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
@@ -37,6 +40,9 @@ app.use("/dhruvsocial/post/postUser", postUser);
 app.use("/dhruvsocial/post/verifyUser", verifyUser);
 
 app.use("/dhruvsocial/post/createPost", createPost);
+
+// Delete
+app.use("/dhruvsocial/delete/deletePost", deletePost);
 
 app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });
