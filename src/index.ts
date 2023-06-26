@@ -1,5 +1,6 @@
 import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import { autoDeleteUsers } from "./core/utilities/deleteUser";
 
@@ -12,6 +13,7 @@ import loginAuth from "./core/auth/login";
 // Get
 import fetchSelf from "./routes/get/fetchSelf";
 import fetchOther from "./routes/get/fetchOther";
+import fetchAllUsers from "./routes/get/fetchAllUsers";
 
 // Post
 import postUser from "./routes/post/createUser/postUser";
@@ -22,18 +24,23 @@ import createPost from "./routes/post/makePost/createPost";
 // Delete
 import deletePost from "./routes/delete/deletePost";
 
+// Put
+import followUser from "./routes/put/followUser";
+
 const app: Application = express();
 const port: number = parseInt(process.env.API_PORT!);
 const devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
 
 app.use(express.json());
-
+app.use(cors());
 // Use Routes
 // Auth
 app.use("/dhruvsocial/auth/loginAuth", loginAuth);
 
+// Get
 app.use("/dhruvsocial/get/fetchSelf", fetchSelf);
 app.use("/dhruvsocial/get/fetchOther", fetchOther);
+app.use("/dhruvsocial/fetchAllUsers", fetchAllUsers);
 
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
@@ -43,6 +50,9 @@ app.use("/dhruvsocial/post/createPost", createPost);
 
 // Delete
 app.use("/dhruvsocial/delete/deletePost", deletePost);
+
+// Put
+app.use("/dhruvsocial/put/followUser", followUser);
 
 app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });
