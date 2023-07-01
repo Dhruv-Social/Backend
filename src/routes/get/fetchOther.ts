@@ -7,6 +7,7 @@ import { prisma } from "../../core/prisma/prisma";
 
 const fetchOther: Router = express.Router();
 
+// Endpoint to get another user
 fetchOther.get("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.query;
 
@@ -18,6 +19,7 @@ fetchOther.get("/", authToken, async (req: Request, res: Response) => {
 
   const arr: string[] = [uuid];
 
+  // Verifying the data inputed from the user
   if (!verifyArray(arr)) {
     return res
       .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
@@ -41,6 +43,7 @@ fetchOther.get("/", authToken, async (req: Request, res: Response) => {
     },
   });
 
+  // If the data is null, then we return an error via the Error class
   if (userData === null) {
     return res
       .status(GetErrors.getUserDoesNotExist().details.errorCode)

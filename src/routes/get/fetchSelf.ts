@@ -5,7 +5,7 @@ import { authToken } from "../../core/auth/auth";
 
 const fetchSelf: Router = express.Router();
 
-// This route is to get a user based on their username
+// Endpoint to get a users own data
 fetchSelf.get("/", authToken, async (req: Request | any, res: Response) => {
   const { uuid } = req.user;
 
