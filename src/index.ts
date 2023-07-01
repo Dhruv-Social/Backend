@@ -33,6 +33,7 @@ const devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
 
 app.use(express.json());
 app.use(cors());
+
 // Use Routes
 // Auth
 app.use("/dhruvsocial/auth/loginAuth", loginAuth);
@@ -40,7 +41,7 @@ app.use("/dhruvsocial/auth/loginAuth", loginAuth);
 // Get
 app.use("/dhruvsocial/get/fetchSelf", fetchSelf);
 app.use("/dhruvsocial/get/fetchOther", fetchOther);
-app.use("/dhruvsocial/fetchAllUsers", fetchAllUsers);
+app.use("/dhruvsocial/get/fetchAllUsers", fetchAllUsers);
 
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
