@@ -19,11 +19,18 @@ import {
 import { createToken } from "../../../core/jwt/jwt";
 import { IUser, IPostToken } from "../../../core/data/interfaces";
 import { prisma } from "../../../core/prisma/prisma";
+import {
+  defaultProfilePicture,
+  defaultProfileBackground,
+} from "../../../core/data/data";
 
 const postUser: Router = express.Router();
 
 // This route is to get a user based on their username
 postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
+  let banner;
+  let profilePicture;
+
   const {
     username,
     display_name,
@@ -36,8 +43,21 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     location,
   } = req.body;
 
-  const profilePicture = req.files.profilePicture.data.toString("base64");
-  const banner = req.files.banner.data.toString("base64");
+  console.log(req.files.banner);
+
+  // Checking to make sure the files were uploaded
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("No files were uploaded.");
+  }
+
+  profilePicture =
+    req.files.profile_picture !== undefined
+      ? req.files.profilePicture.data.toString("base64")
+      : defaultProfilePicture;
+  banner =
+    req.files.banner !== undefined
+      ? req.files.banner.data.toString("base64")
+      : defaultProfileBackground;
 
   // Here we verifying the data, if it is not correct then we return an error to the user.w
   const arr: string[] = [
@@ -88,8 +108,8 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     password: await hashPassword(password),
     description: description,
     location: location,
-    followers: [{}],
-    following: [{}],
+    followers: [],
+    following: [],
     verified: false,
     posts: [],
     profilePicture: profilePicture,
