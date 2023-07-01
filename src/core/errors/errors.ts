@@ -22,6 +22,32 @@ export class Errors {
   }
 }
 
+export class PutErrors extends Errors {
+  private constructor() {
+    super();
+  }
+
+  static followUserYouAlreadyFollow() {
+    return {
+      success: false,
+      details: {
+        reason: "You alerady follow this user",
+        errorCode: 400,
+      },
+    };
+  }
+
+  static followUserIncorrectUuid() {
+    return {
+      success: false,
+      details: {
+        reason: "This UUID does not exis in the database",
+        errorCode: 400,
+      },
+    };
+  }
+}
+
 export class DeleteErrors extends Errors {
   private constructor() {
     super();
