@@ -21,8 +21,8 @@ model User {
   password        String
   description     String 
   location        String
-  followers       Json[]
-  following       Json[]
+  followers       String[]
+  following       String[] 
   verified        Boolean     @default(false)
   posts           String[]
   profilePicture  String

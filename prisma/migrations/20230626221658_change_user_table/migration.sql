@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "followers" SET DATA TYPE TEXT[],
+ALTER COLUMN "following" SET DATA TYPE TEXT[];
