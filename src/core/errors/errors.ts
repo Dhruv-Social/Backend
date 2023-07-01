@@ -31,7 +31,17 @@ export class PutErrors extends Errors {
     return {
       success: false,
       details: {
-        reason: "You alerady follow this user",
+        reason: "You already follow this user",
+        errorCode: 400,
+      },
+    };
+  }
+
+  static unfollowUserYouDontFollow() {
+    return {
+      success: false,
+      details: {
+        reason: "You can not unfollow a user you don't follow",
         errorCode: 400,
       },
     };
