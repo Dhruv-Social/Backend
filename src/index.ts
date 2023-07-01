@@ -26,6 +26,7 @@ import deletePost from "./routes/delete/deletePost";
 
 // Put
 import followUser from "./routes/put/followUser";
+import unfollowUser from "./routes/put/unfollowUser";
 
 const app: Application = express();
 const port: number = parseInt(process.env.API_PORT!);
@@ -54,6 +55,7 @@ app.use("/dhruvsocial/delete/deletePost", deletePost);
 
 // Put
 app.use("/dhruvsocial/put/followUser", followUser);
+app.use("/dhruvsocial/put/unfollowUser", unfollowUser);
 
 app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });
