@@ -5,14 +5,13 @@ import { verifyArray } from "../../core/verifyArray/verifyArray";
 import { PutErrors } from "../../core/errors/errors";
 import { prisma } from "../../core/prisma/prisma";
 
-const followUser: Router = express.Router();
+const unfollowUser: Router = express.Router();
 
-// Endpoint to follow a user
-followUser.put("/", authToken, async (req: Request | any, res: Response) => {
+unfollowUser.put("/", authToken, async (req: Request | any, res: Response) => {
   const { uuid } = req.user;
-  const { uuidToFollow } = req.query;
+  const { uuidToUnfollow } = req.query;
 
-  let arr: string[] = [uuid, uuidToFollow];
+  let arr: string[] = [uuid, uuidToUnfollow];
 
   // Verify that the user provided the right data
   if (!verifyArray(arr)) {
@@ -24,10 +23,19 @@ followUser.put("/", authToken, async (req: Request | any, res: Response) => {
   // Get the users following
   const usersFollowing = await prisma.user.findUnique({
     where: {
-      uuid: uuidToFollow,
+      uuid: uuidToUnfollow,
     },
     select: {
       followers: true,
+    },
+  });
+
+  const usersIAmFollwing = await prisma.user.findUnique({
+    where: {
+      uuid: uuid,
+    },
+    select: {
+      following: true,
     },
   });
 
@@ -38,30 +46,30 @@ followUser.put("/", authToken, async (req: Request | any, res: Response) => {
       .send(PutErrors.followUserIncorrectUuid());
   }
 
-  // If the user sending the request to follow is already in that list, then we know we already follow them
-  if (usersFollowing?.followers.includes(uuid)) {
+  // If the user is not in the users following list, then we know that they do not follow then, then we send them an error
+  if (!usersFollowing?.followers.includes(uuid)) {
     return res
-      .status(PutErrors.followUserYouAlreadyFollow().details.errorCode)
-      .send(PutErrors.followUserYouAlreadyFollow());
+      .status(PutErrors.unfollowUserYouDontFollow().details.errorCode)
+      .send(PutErrors.unfollowUserYouDontFollow());
   }
 
-  // Else we just add them to the following list
+  // Else we just remove them from the following list
   await prisma.user.update({
     data: {
       followers: {
-        push: uuid,
+        set: usersFollowing.followers.filter((id) => id !== uuid),
       },
     },
     where: {
-      uuid: uuidToFollow,
+      uuid: uuidToUnfollow,
     },
   });
 
-  // Add the followed user to the following list
+  // Remove the followed user from the following list
   await prisma.user.update({
     data: {
       following: {
-        push: uuidToFollow,
+        set: usersIAmFollwing?.following.filter((id) => id !== uuidToUnfollow),
       },
     },
     where: {
@@ -72,4 +80,4 @@ followUser.put("/", authToken, async (req: Request | any, res: Response) => {
   return res.send("success");
 });
 
-export default followUser;
+export default unfollowUser;
