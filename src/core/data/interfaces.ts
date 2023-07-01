@@ -9,8 +9,8 @@ export interface IUser {
   password: string;
   description: string;
   location: string;
-  followers: [{}];
-  following: [{}];
+  followers: string[];
+  following: string[];
   verified: boolean;
   posts: string[];
   profilePicture: string;
