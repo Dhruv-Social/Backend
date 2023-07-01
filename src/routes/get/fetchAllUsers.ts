@@ -13,6 +13,10 @@ fetchAllUsers.get("/", async (req, res) => {
   */
   const users = await prisma.user.findMany();
 
+  users.map((user: any) => {
+    user.creationDate = user.creationDate.toString();
+  });
+
   return res.send(users);
 });
 
