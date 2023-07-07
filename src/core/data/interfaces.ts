@@ -46,3 +46,19 @@ export interface IUserLogin {
   username: string;
   password: string;
 }
+
+export interface IFollowerData {
+  uuid: string;
+  username: string;
+  display_name: string;
+  profilePicture: string;
+  banner: string;
+}
+
+export interface IFollowingData {
+  uuid: string;
+  username: string;
+  display_name: string;
+  profilePicture: string;
+  banner: string;
+}
