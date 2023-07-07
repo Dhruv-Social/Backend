@@ -18,6 +18,7 @@ import fetchAllUsers from "./routes/get/fetchAllUsers";
 // Post
 import postUser from "./routes/post/createUser/postUser";
 import verifyUser from "./routes/post/createUser/verifyUser";
+import postUserNoAuth from "./routes/post/createUser/postUserNoEmailAuth";
 
 import createPost from "./routes/post/makePost/createPost";
 
@@ -47,6 +48,7 @@ app.use("/dhruvsocial/get/fetchAllUsers", fetchAllUsers);
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
 app.use("/dhruvsocial/post/verifyUser", verifyUser);
+app.use("/dhruvsocial/post/postUserNoAuth", postUserNoAuth);
 
 app.use("/dhruvsocial/post/createPost", createPost);
 
