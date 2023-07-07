@@ -14,6 +14,7 @@ import loginAuth from "./core/auth/login";
 import fetchSelf from "./routes/get/fetchSelf";
 import fetchOther from "./routes/get/fetchOther";
 import fetchAllUsers from "./routes/get/fetchAllUsers";
+import fetchUserFollowers from "./routes/get/fetchUserFollowers";
 
 // Post
 import postUser from "./routes/post/createUser/postUser";
@@ -44,6 +45,7 @@ app.use("/dhruvsocial/auth/loginAuth", loginAuth);
 app.use("/dhruvsocial/get/fetchSelf", fetchSelf);
 app.use("/dhruvsocial/get/fetchOther", fetchOther);
 app.use("/dhruvsocial/get/fetchAllUsers", fetchAllUsers);
+app.use("/dhruvsocial/get/fetchUserFollowers", fetchUserFollowers);
 
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
