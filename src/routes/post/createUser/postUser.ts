@@ -115,74 +115,72 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     creationDate: Date.now(),
   };
 
-  return res.send(user.profilePicture);
+  // Checking to make sure the the user with that username does exist, if so, we return an error
+  let prismaReturn = await prisma.user.findUnique({
+    where: {
+      username: user.username,
+    },
+  });
 
-  // // Checking to make sure the the user with that username does exist, if so, we return an error
-  // let prismaReturn = await prisma.user.findUnique({
-  //   where: {
-  //     username: user.username,
-  //   },
-  // });
+  if (prismaReturn !== null) {
+    return res
+      .status(PostErrors.postUserUserWithUsernameExists().details.errorCode)
+      .send(PostErrors.postUserUserWithUsernameExists());
+  }
 
-  // if (prismaReturn !== null) {
-  //   return res
-  //     .status(PostErrors.postUserUserWithUsernameExists().details.errorCode)
-  //     .send(PostErrors.postUserUserWithUsernameExists());
-  // }
+  let createTokenData: IPostToken = {
+    uuid: user.uuid,
+  };
 
-  // let createTokenData: IPostToken = {
-  //   uuid: user.uuid,
-  // };
+  let postUserToken = createToken(createTokenData);
 
-  // let postUserToken = createToken(createTokenData);
+  const transporter = nodemailer.createTransport({
+    service: "hotmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
 
-  // const transporter = nodemailer.createTransport({
-  //   service: "hotmail",
-  //   auth: {
-  //     user: process.env.EMAIL_USER,
-  //     pass: process.env.EMAIL_PASSWORD,
-  //   },
-  // });
+  const options = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Verify Your Account",
+    text: postUserToken,
+  };
 
-  // const options = {
-  //   from: process.env.EMAIL_USER,
-  //   to: email,
-  //   subject: "Verify Your Account",
-  //   text: postUserToken,
-  // };
+  // Posting the user to the database
+  await prisma.user.create({
+    data: {
+      uuid: user.uuid,
+      username: user.username,
+      display_name: user.display_name,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      phonenumber: user.phonenumber,
+      password: user.password,
+      description: user.description,
+      location: user.location,
+      followers: user.followers,
+      following: user.following,
+      verified: user.verified,
+      posts: user.posts,
+      profilePicture: user.profilePicture,
+      banner: user.banner,
+      creationDate: user.creationDate,
+    },
+  });
 
-  // // Posting the user to the database
-  // await prisma.user.create({
-  //   data: {
-  //     uuid: user.uuid,
-  //     username: user.username,
-  //     display_name: user.display_name,
-  //     firstname: user.firstname,
-  //     lastname: user.lastname,
-  //     email: user.email,
-  //     phonenumber: user.phonenumber,
-  //     password: user.password,
-  //     description: user.description,
-  //     location: user.location,
-  //     followers: user.followers,
-  //     following: user.following,
-  //     verified: user.verified,
-  //     posts: user.posts,
-  //     profilePicture: user.profilePicture,
-  //     banner: user.banner,
-  //     creationDate: user.creationDate,
-  //   },
-  // });
+  try {
+    await transporter.sendMail(options);
+  } catch (err: any) {
+    return res
+      .status(PostErrors.postUserEmailSendError().details.errorCode)
+      .send(PostErrors.postUserEmailSendError());
+  }
 
-  // try {
-  //   await transporter.sendMail(options);
-  // } catch (err: any) {
-  //   return res
-  //     .status(PostErrors.postUserEmailSendError().details.errorCode)
-  //     .send(PostErrors.postUserEmailSendError());
-  // }
-
-  // return res.send("success");
+  return res.send("success");
 });
 
 export default postUser;
