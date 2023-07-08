@@ -79,6 +79,16 @@ export class GetErrors extends Errors {
     super();
   }
 
+  static reelsError() {
+    return {
+      success: false,
+      details: {
+        reason: "An error occoured while fetching reel, try again late",
+        errorCode: 400,
+      },
+    };
+  }
+
   static getUserDidNotProvideDetails() {
     return {
       success: false,
