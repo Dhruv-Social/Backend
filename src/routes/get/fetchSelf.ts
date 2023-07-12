@@ -15,7 +15,7 @@ fetchSelf.get("/", authToken, async (req: Request | any, res: Response) => {
     },
   });
 
-  let returnUser: any = { ...user };
+  const returnUser: any = { ...user };
   returnUser.creationDate = returnUser.creationDate?.toString();
 
   return res.send(returnUser);
