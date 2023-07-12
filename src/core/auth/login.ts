@@ -1,5 +1,4 @@
 import express, { Request, Response, Router } from "express";
-import jwt from "jsonwebtoken";
 
 import { verifyPassword } from "../argon2/argon";
 import { prisma } from "../prisma/prisma";
@@ -10,7 +9,12 @@ import {
 } from "../data/interfaces";
 import { PostErrors, AuthErrors } from "../errors/errors";
 import { verifyArray } from "../verifyArray/verifyArray";
-import { createToken } from "../jwt/jwt";
+import {
+  createToken,
+  createRefreshToken,
+  decryptTokenRefresh,
+} from "../jwt/jwt";
+import { redisClient } from "../redis/redis";
 
 const loginAuth: Router = express.Router();
 
@@ -26,6 +30,44 @@ const scopes: ITokenPayloadScopes = {
   canReadOtherProfiles: true,
   canDeleteSelf: true,
 };
+
+loginAuth.post("/refresh", async (req: Request, res: Response) => {
+  const { token } = req.body;
+
+  const arr = [token];
+
+  if (!verifyArray(arr))
+    return res
+      .status(AuthErrors.didNotProvideDetails().details.errorCode)
+      .send(AuthErrors.didNotProvideDetails());
+
+  let tokenData;
+
+  try {
+    tokenData = decryptTokenRefresh(token);
+  } catch (err) {
+    return res.status(400).send({ detail: "How dare you give me a bad token" });
+  }
+
+  let redisRes = await redisClient.get(`token:${tokenData.uuid}`);
+
+  if (redisRes === null)
+    return res.status(400).send({ detail: "You do not exist in the database" });
+
+  if (redisRes !== token)
+    return res.status(400).send({
+      detail: "You must only use a new your latest refresh token",
+    });
+
+  const tokenDataRefresh: ITokenPayload = {
+    uuid: tokenData.uuid,
+    scopes: scopes,
+  };
+
+  res.send({
+    accessToken: createToken(tokenDataRefresh),
+  });
+});
 
 loginAuth.post("/", async (req: Request | any, res: Response) => {
   const { username, password } = req.body;
@@ -70,8 +112,13 @@ loginAuth.post("/", async (req: Request | any, res: Response) => {
     scopes: scopes,
   };
 
+  let refreshToken = createRefreshToken(prismaReturn.uuid);
+
+  redisClient.set(`token:${prismaReturn.uuid}`, refreshToken);
+
   res.send({
     accessToken: createToken(tokenData),
+    refreshToken: refreshToken,
   });
 });
 

@@ -1,7 +1,7 @@
 import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-
+import { redisClient } from "./core/redis/redis";
 import { autoDeleteUsers } from "./core/utilities/deleteUser";
 
 dotenv.config();
@@ -71,6 +71,11 @@ app.use("/dhruvsocial/put/likePost", likePost);
 
 app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });
+});
+
+app.get("/e", async (req: Request, res: Response) => {
+  console.log(await redisClient.get("e"));
+  res.send("Success!");
 });
 
 // Fallback
