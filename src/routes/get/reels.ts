@@ -16,10 +16,10 @@ reels.get("/", async (req: Request, res: Response) => {
           .status(GetErrors.reelsError().details.errorCode)
           .send(GetErrors.reelsError());
       }
-      let max = files.length - 1;
-      let min = 0;
+      const max = files.length - 1;
+      const min = 0;
 
-      let index = Math.round(Math.random() * (max - min) + min);
+      const index = Math.round(Math.random() * (max - min) + min);
 
       res.sendFile(`${process.cwd()}/src/public/capybara/${files[index]}`);
     }
