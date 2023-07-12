@@ -62,3 +62,10 @@ export interface IFollowingData {
   profilePicture: string;
   banner: string;
 }
+
+export interface IPostComment {
+  commentUuid: string;
+  authorUuid: string;
+  text: string;
+  likes: number;
+}
