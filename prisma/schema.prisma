@@ -33,7 +33,7 @@ model User {
 model Post {
   post_uuid       String      @id @unique
   author_uuid     String
-  likes           Json[]
+  likes           String[]
   comments        Json[]
   text            String
   media           String[]
