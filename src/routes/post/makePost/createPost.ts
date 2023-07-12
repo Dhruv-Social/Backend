@@ -58,8 +58,8 @@ createPost.post(
     const post: Post = {
       post_uuid: crypto.randomUUID(),
       author_uuid: uuid,
-      likes: [{}],
-      comments: [{}],
+      likes: [],
+      comments: [],
       text: text,
       media: media,
     };
