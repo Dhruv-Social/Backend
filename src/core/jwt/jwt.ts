@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
  * @param user Not the hashed password
  * @return Returns a token
  */
-let createToken = (user: any): any => {
+const createToken = (user: any): any => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET!, {
     expiresIn: "1h",
   });
@@ -16,11 +16,11 @@ let createToken = (user: any): any => {
  * @param token jwt token
  * @returns a dictionary of the values in the token
  */
-let decryptToken = (token: any): any => {
+const decryptToken = (token: any): any => {
   return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);
 };
 
-let decryptTokenRefresh = (token: any): any => {
+const decryptTokenRefresh = (token: any): any => {
   return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!);
 };
 
