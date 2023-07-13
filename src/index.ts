@@ -18,6 +18,7 @@ import fetchUserFollowers from "./routes/get/fetchUserFollowers";
 import fetchUserFollowing from "./routes/get/fetchUserFollowing";
 import reels from "./routes/get/reels";
 import forYouPosts from "./routes/get/forYouPosts";
+import fetchUsersPosts from "./routes/get/fetchUserPost";
 
 // Post
 import postUser from "./routes/post/createUser/postUser";
@@ -54,6 +55,7 @@ app.use("/dhruvsocial/get/fetchUserFollowers", fetchUserFollowers);
 app.use("/dhruvsocial/get/fetchUserFollowing", fetchUserFollowing);
 app.use("/dhruvsocial/get/reels", reels);
 app.use("/dhruvsocial/get/forYouPosts", forYouPosts);
+app.use("/dhruvsocial/get/fetchUsersPosts", fetchUsersPosts);
 
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
@@ -73,11 +75,6 @@ app.use("/dhruvsocial/put/likePost", likePost);
 
 app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });
-});
-
-app.get("/e", async (req: Request, res: Response) => {
-  console.log(await redisClient.get("e"));
-  res.send("Success!");
 });
 
 // Fallback
