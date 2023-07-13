@@ -17,6 +17,7 @@ import fetchAllUsers from "./routes/get/fetchAllUsers";
 import fetchUserFollowers from "./routes/get/fetchUserFollowers";
 import fetchUserFollowing from "./routes/get/fetchUserFollowing";
 import reels from "./routes/get/reels";
+import forYouPosts from "./routes/get/forYouPosts";
 
 // Post
 import postUser from "./routes/post/createUser/postUser";
@@ -52,6 +53,7 @@ app.use("/dhruvsocial/get/fetchAllUsers", fetchAllUsers);
 app.use("/dhruvsocial/get/fetchUserFollowers", fetchUserFollowers);
 app.use("/dhruvsocial/get/fetchUserFollowing", fetchUserFollowing);
 app.use("/dhruvsocial/get/reels", reels);
+app.use("/dhruvsocial/get/forYouPosts", forYouPosts);
 
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
