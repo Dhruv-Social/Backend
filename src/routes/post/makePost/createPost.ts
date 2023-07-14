@@ -55,9 +55,25 @@ createPost.post(
         .send(PostErrors.postUserInvalidDetails());
     }
 
+    const userData = await prisma.user.findUnique({
+      where: {
+        uuid: uuid,
+      },
+      select: {
+        username: true,
+        display_name: true,
+      },
+    });
+
+    if (userData === null) {
+      return;
+    }
+
     const post: Post = {
       post_uuid: crypto.randomUUID(),
       author_uuid: uuid,
+      author_display_name: userData.display_name,
+      author_username: userData.username,
       likes: [],
       comments: [],
       text: text,
@@ -79,6 +95,8 @@ createPost.post(
       data: {
         post_uuid: post.post_uuid,
         author_uuid: post.author_uuid,
+        author_display_name: post.author_display_name,
+        author_username: post.author_username,
         likes: post.likes,
         comments: post.comments,
         text: post.text,

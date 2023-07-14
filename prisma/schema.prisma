@@ -31,10 +31,12 @@ model User {
 }
 
 model Post {
-  post_uuid       String      @id @unique
-  author_uuid     String
-  likes           String[]
-  comments        Json[]
-  text            String
-  media           String[]
+  post_uuid            String      @id @unique
+  author_uuid          String      @default("")
+  author_display_name  String      @default("")
+  author_username      String
+  likes                String[]
+  comments             Json[]
+  text                 String
+  media                String[]
 }
