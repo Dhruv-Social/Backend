@@ -9,6 +9,7 @@ import nodemailer from "nodemailer";
 import { decryptToken } from "../../../core/jwt/jwt";
 import { prisma } from "../../../core/prisma/prisma";
 import { PostErrors } from "../../../core/errors/errors";
+import { redisClient } from "../../../core/redis/redis";
 
 const verifyUser: Router = express.Router();
 
@@ -39,6 +40,15 @@ verifyUser.post("/", async (req: Request, res: Response) => {
       uuid: uuid,
     },
   });
+
+  // Update the Redis Cache
+  let updateRedis = {
+    uuid: user?.uuid,
+    profilePicture: user?.profilePicture,
+    displayName: user?.display_name,
+  };
+
+  await redisClient.set(`user:${user?.username}`, JSON.stringify(updateRedis));
 
   // Send email to user
   const transporter = nodemailer.createTransport({

@@ -3,11 +3,12 @@ import path from "path";
 import fs from "fs";
 
 import { GetErrors } from "../../core/errors/errors";
+import { authToken } from "../../core/auth/auth";
 
 const reels: Router = express.Router();
 
 // Endpoint to get a users own data
-reels.get("/", async (req: Request, res: Response) => {
+reels.get("/", authToken, async (req: Request, res: Response) => {
   fs.readdir(
     path.join(`${process.cwd()}/src/public/capybara`),
     (err, files) => {

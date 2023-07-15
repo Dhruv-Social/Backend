@@ -61,18 +61,20 @@ createPost.post(
       },
       select: {
         username: true,
+        profilePicture: true,
         display_name: true,
       },
     });
 
     if (userData === null) {
-      return;
+      return res.send("err");
     }
 
     const post: Post = {
       post_uuid: crypto.randomUUID(),
       author_uuid: uuid,
       author_display_name: userData.display_name,
+      author_profile_picture: userData.profilePicture,
       author_username: userData.username,
       likes: [],
       comments: [],
@@ -96,6 +98,7 @@ createPost.post(
         post_uuid: post.post_uuid,
         author_uuid: post.author_uuid,
         author_display_name: post.author_display_name,
+        author_profile_picture: post.author_profile_picture,
         author_username: post.author_username,
         likes: post.likes,
         comments: post.comments,

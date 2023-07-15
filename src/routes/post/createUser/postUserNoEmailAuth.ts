@@ -21,6 +21,7 @@ import {
   defaultProfilePicture,
   defaultProfileBackground,
 } from "../../../core/data/data";
+import { redisClient } from "../../../core/redis/redis";
 
 const postUserNoAuth: Router = express.Router();
 
@@ -154,6 +155,18 @@ postUserNoAuth.post(
         creationDate: user.creationDate,
       },
     });
+
+    // Updaing the redis cache
+    let updateRedis = {
+      uuid: user?.uuid,
+      profilePicture: user?.profilePicture,
+      displayName: user?.display_name,
+    };
+
+    await redisClient.set(
+      `user:${user?.username}`,
+      JSON.stringify(updateRedis)
+    );
 
     return res.send("success");
   }
