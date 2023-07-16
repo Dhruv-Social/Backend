@@ -9,7 +9,7 @@ const deletePost: Router = express.Router();
 deletePost.delete("/", async (req: Request, res: Response) => {
   const { uuid } = req.body;
 
-  let arr: string[] = [uuid];
+  const arr: string[] = [uuid];
 
   if (!verifyArray(arr)) {
     return res

@@ -11,7 +11,7 @@ unfollowUser.put("/", authToken, async (req: Request | any, res: Response) => {
   const { uuid } = req.user;
   const { uuidToUnfollow } = req.query;
 
-  let arr: string[] = [uuid, uuidToUnfollow];
+  const arr: string[] = [uuid, uuidToUnfollow];
 
   // Verify that the user provided the right data
   if (!verifyArray(arr)) {

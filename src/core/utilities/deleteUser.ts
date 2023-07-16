@@ -1,6 +1,6 @@
 import { spawn, Worker } from "threads";
 
-let autoDeleteUsers = async () => {
+const autoDeleteUsers = async () => {
   const deleteUsers = await spawn(new Worker("../../workers/worker.ts"));
 
   deleteUsers();

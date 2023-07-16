@@ -1,6 +1,4 @@
 export class Errors {
-  constructor() {}
-
   static didNotProvideUsername() {
     return {
       success: false,

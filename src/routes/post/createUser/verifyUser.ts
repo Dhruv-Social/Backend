@@ -24,7 +24,7 @@ verifyUser.post("/", async (req: Request, res: Response) => {
     return res.send({ detail: err });
   }
 
-  let { uuid } = payload;
+  const { uuid } = payload;
 
   await prisma.user.update({
     where: {
@@ -35,14 +35,14 @@ verifyUser.post("/", async (req: Request, res: Response) => {
     },
   });
 
-  let user = await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       uuid: uuid,
     },
   });
 
   // Update the Redis Cache
-  let updateRedis = {
+  const updateRedis = {
     uuid: user?.uuid,
     profilePicture: user?.profilePicture,
     displayName: user?.display_name,

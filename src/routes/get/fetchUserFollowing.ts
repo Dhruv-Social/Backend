@@ -26,7 +26,7 @@ fetchUserFollowing.get(
       return res.send();
     }
 
-    let arrOfFollowingData: IFollowingData[] = [];
+    const arrOfFollowingData: IFollowingData[] = [];
 
     for (let i = 0; i < userFollowing.following.length; i++) {
       const prismaReturn = await prisma.user.findUnique({

@@ -26,7 +26,7 @@ fetchOther.get("/", authToken, async (req: Request, res: Response) => {
       .send(GetErrors.getUserDidNotProvideDetails());
   }
 
-  let userData = await prisma.user.findUnique({
+  const userData = await prisma.user.findUnique({
     where: {
       uuid: uuid,
     },

@@ -1,4 +1,4 @@
-let verifyUsername = (username: string): boolean => {
+const verifyUsername = (username: string): boolean => {
   if (!/^[A-Za-z0-9]*$/.test(username)) {
     return false;
   }
@@ -6,7 +6,7 @@ let verifyUsername = (username: string): boolean => {
   return true;
 };
 
-let verifyPassword = (password: string): boolean => {
+const verifyPassword = (password: string): boolean => {
   if (password.length < 7) {
     return false;
   }
@@ -18,7 +18,7 @@ let verifyPassword = (password: string): boolean => {
   return true;
 };
 
-let verifyLocation = (city: string): boolean => {
+const verifyLocation = (city: string): boolean => {
   const cities = [
     "Auckland",
     "Christchurch",

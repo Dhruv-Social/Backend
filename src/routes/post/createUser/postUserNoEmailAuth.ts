@@ -4,7 +4,7 @@
 */
 
 import express, { Request, Response, Router } from "express";
-const fileUpload = require("express-fileupload");
+import fileUpload from "express-fileupload";
 import crypto from "crypto";
 
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
@@ -30,9 +30,6 @@ postUserNoAuth.post(
   "/",
   fileUpload(),
   async (req: Request | any, res: Response) => {
-    let banner;
-    let profilePicture;
-
     const {
       username,
       display_name,
@@ -50,11 +47,11 @@ postUserNoAuth.post(
       return res.status(400).send("No files were uploaded.");
     }
 
-    profilePicture =
+    const profilePicture =
       req.files.profilePicture !== undefined
         ? req.files.profilePicture.data.toString("base64")
         : defaultProfilePicture;
-    banner =
+    const banner =
       req.files.banner !== undefined
         ? req.files.banner.data.toString("base64")
         : defaultProfileBackground;
@@ -118,7 +115,7 @@ postUserNoAuth.post(
     };
 
     // Checking to make sure the the user with that username does exist, if so, we return an error
-    let prismaReturn = await prisma.user.findUnique({
+    const prismaReturn = await prisma.user.findUnique({
       where: {
         username: user.username,
       },
@@ -157,7 +154,7 @@ postUserNoAuth.post(
     });
 
     // Updaing the redis cache
-    let updateRedis = {
+    const updateRedis = {
       uuid: user?.uuid,
       profilePicture: user?.profilePicture,
       displayName: user?.display_name,

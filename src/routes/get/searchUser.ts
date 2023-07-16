@@ -7,14 +7,14 @@ const searchUser: Router = express.Router();
 
 // Endpoint to get a users data
 searchUser.get("/", authToken, async (req: Request, res: Response) => {
-  let { user } = req.query;
+  const { user } = req.query;
 
-  let userData: object[] = [];
+  const userData: object[] = [];
 
-  let similarUsersArr = await redisClient.keys(`*user:${user}*`);
+  const similarUsersArr = await redisClient.keys(`*user:${user}*`);
 
   for (let i = 0; i < similarUsersArr.length; i++) {
-    let userJsonString = await redisClient.get(similarUsersArr[i]);
+    const userJsonString = await redisClient.get(similarUsersArr[i]);
 
     if (userJsonString === null) {
       return res.send("User can not be found.");
@@ -22,6 +22,8 @@ searchUser.get("/", authToken, async (req: Request, res: Response) => {
 
     userData.push(JSON.parse(userJsonString));
   }
+
+  userData.filter((user: any) => user.uuid === user);
 
   return res.send(userData);
 });

@@ -4,7 +4,7 @@
 */
 
 import express, { Request, Response, Router } from "express";
-const fileUpload = require("express-fileupload");
+import fileUpload from "express-fileupload";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 
@@ -28,9 +28,6 @@ const postUser: Router = express.Router();
 
 // This route is to get a user based on their username
 postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
-  let banner;
-  let profilePicture;
-
   const {
     username,
     display_name,
@@ -48,11 +45,11 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     return res.status(400).send("No files were uploaded.");
   }
 
-  profilePicture =
+  const profilePicture =
     req.files.profilePicture !== undefined
       ? req.files.profilePicture.data.toString("base64")
       : defaultProfilePicture;
-  banner =
+  const banner =
     req.files.banner !== undefined
       ? req.files.banner.data.toString("base64")
       : defaultProfileBackground;
@@ -116,7 +113,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
   };
 
   // Checking to make sure the the user with that username does exist, if so, we return an error
-  let prismaReturn = await prisma.user.findUnique({
+  const prismaReturn = await prisma.user.findUnique({
     where: {
       username: user.username,
     },
@@ -128,11 +125,11 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
       .send(PostErrors.postUserUserWithUsernameExists());
   }
 
-  let createTokenData: IPostToken = {
+  const createTokenData: IPostToken = {
     uuid: user.uuid,
   };
 
-  let postUserToken = createToken(createTokenData);
+  const postUserToken = createToken(createTokenData);
 
   const transporter = nodemailer.createTransport({
     service: "hotmail",

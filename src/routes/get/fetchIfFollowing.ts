@@ -25,7 +25,7 @@ fetchIfFollowing.get(
     }
 
     // Get the following list of the user we are checking
-    let followingArr = await prisma.user.findUnique({
+    const followingArr = await prisma.user.findUnique({
       where: {
         uuid: ifFollowingUuid,
       },
@@ -38,7 +38,7 @@ fetchIfFollowing.get(
       return res.status(400).send({ detail: "This user does not exist" });
     }
 
-    let isFollowing = followingArr.followers.includes(uuid);
+    const isFollowing = followingArr.followers.includes(uuid);
 
     if (!isFollowing) {
       return res.send({ detail: false });

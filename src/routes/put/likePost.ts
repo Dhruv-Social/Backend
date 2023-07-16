@@ -11,7 +11,7 @@ likePost.put("/", authToken, async (req: Request | any, res: Response) => {
   const { uuid } = req.user;
   const { postUuid } = req.query;
 
-  let arr = [postUuid];
+  const arr = [postUuid];
 
   if (!verifyArray(arr))
     return res

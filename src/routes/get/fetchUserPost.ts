@@ -6,6 +6,8 @@ import { Post } from "@prisma/client";
 
 const fetchUsersPosts: Router = express.Router();
 
+// import { TokenRequest } from "../../core/auth/auth";
+
 // Endpoint to get the user posts
 fetchUsersPosts.get(
   "/",
@@ -13,7 +15,7 @@ fetchUsersPosts.get(
   async (req: Request | any, res: Response) => {
     const { uuid } = req.user;
 
-    let posts: Post[] = await prisma.post.findMany({
+    const posts: Post[] = await prisma.post.findMany({
       where: {
         author_uuid: uuid,
       },

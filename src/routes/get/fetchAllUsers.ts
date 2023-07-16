@@ -2,10 +2,10 @@ import express, { Request, Response, Router } from "express";
 
 import { prisma } from "../../core/prisma/prisma";
 
-const fetchAllUsers = express.Router();
+const fetchAllUsers: Router = express.Router();
 
 // Endpoint to get all the users from the database
-fetchAllUsers.get("/", async (req, res) => {
+fetchAllUsers.get("/", async (req: Request, res: Response) => {
   /* 
     `const users = await prisma.user.findMany();` is fetching all the users from the database using
     Prisma's `findMany()` method. This method retrieves multiple records from the specified table, in

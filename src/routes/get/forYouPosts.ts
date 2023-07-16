@@ -9,7 +9,7 @@ const forYouPosts: Router = express.Router();
 // Endpoint to get a users data
 forYouPosts.get("/", authToken, async (req: Request | any, res: Response) => {
   const { uuid } = req.user;
-  let postsToReturn: Post[] = [];
+  const postsToReturn: Post[] = [];
 
   // Get their following and followers posts
   const followingAndFollowers = await prisma.user.findUnique({
@@ -22,34 +22,36 @@ forYouPosts.get("/", authToken, async (req: Request | any, res: Response) => {
     },
   });
 
+  if (
+    followingAndFollowers?.followers === undefined ||
+    followingAndFollowers?.following === undefined
+  ) {
+    return res.send("You are bad");
+  }
+
   // First we get their following posts
-  followingAndFollowers?.following.forEach(async (followerUuid: string) => {
+  for (let i = 0; i < followingAndFollowers?.following.length; i++) {
     const tmp =
       (await prisma.post.findMany({
         where: {
-          author_uuid: followerUuid,
+          author_uuid: followingAndFollowers?.following[i],
         },
       })) ?? [];
 
     postsToReturn.push(...tmp);
-  });
+  }
 
   // Second we get their followers posts
-  followingAndFollowers?.followers.forEach(async (followerUuid: string) => {
+  for (let i = 0; i < followingAndFollowers?.followers.length; i++) {
     const tmp =
       (await prisma.post.findMany({
         where: {
-          author_uuid: followerUuid,
+          author_uuid: followingAndFollowers?.followers[i],
         },
       })) ?? [];
 
     postsToReturn.push(...tmp);
-  });
-
-  // once they've seen all their important posts then we show them other posts
-  (await prisma.post.findMany({ take: 20 })).forEach((post) => [
-    postsToReturn.push(post),
-  ]);
+  }
 
   return res.send(postsToReturn);
 });

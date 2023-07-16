@@ -47,7 +47,7 @@ createPost.post(
 
     const media: string[] = [media1, media2, media3, media4];
 
-    let arr: string[] = [text];
+    const arr: string[] = [text];
 
     if (!verifyArray(arr)) {
       return res

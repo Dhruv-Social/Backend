@@ -12,7 +12,7 @@ followUser.put("/", authToken, async (req: Request | any, res: Response) => {
   const { uuid } = req.user;
   const { uuidToFollow } = req.query;
 
-  let arr: string[] = [uuid, uuidToFollow];
+  const arr: string[] = [uuid, uuidToFollow];
 
   // Verify that the user provided the right data
   if (!verifyArray(arr)) {

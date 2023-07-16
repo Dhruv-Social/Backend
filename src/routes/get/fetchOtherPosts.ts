@@ -18,7 +18,7 @@ fetchOtherPosts.get("/", authToken, async (req: Request, res: Response) => {
       .send(GetErrors.getUserDidNotProvideDetails());
   }
 
-  let arr = [uuid];
+  const arr = [uuid];
 
   if (!verifyArray(arr)) {
     return res
@@ -26,7 +26,7 @@ fetchOtherPosts.get("/", authToken, async (req: Request, res: Response) => {
       .send(GetErrors.getUserDidNotProvideDetails());
   }
 
-  let posts: Post[] = await prisma.post.findMany({
+  const posts: Post[] = await prisma.post.findMany({
     where: {
       author_uuid: uuid,
     },

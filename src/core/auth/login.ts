@@ -49,7 +49,7 @@ loginAuth.post("/refresh", async (req: Request, res: Response) => {
     return res.status(400).send({ detail: "How dare you give me a bad token" });
   }
 
-  let redisRes = await redisClient.get(`token:${tokenData.uuid}`);
+  const redisRes = await redisClient.get(`token:${tokenData.uuid}`);
 
   if (redisRes === null)
     return res.status(400).send({ detail: "You do not exist in the database" });
@@ -112,7 +112,7 @@ loginAuth.post("/", async (req: Request | any, res: Response) => {
     scopes: scopes,
   };
 
-  let refreshToken = createRefreshToken(prismaReturn.uuid);
+  const refreshToken = createRefreshToken(prismaReturn.uuid);
 
   redisClient.set(`token:${prismaReturn.uuid}`, refreshToken);
 

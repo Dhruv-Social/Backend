@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from "express";
 import crypto from "crypto";
-import fileUpload from "express-fileupload";
 
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
