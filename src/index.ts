@@ -21,6 +21,7 @@ import forYouPosts from "./routes/get/forYouPosts";
 import fetchUsersPosts from "./routes/get/fetchUserPost";
 import searchUser from "./routes/get/searchUser";
 import fetchIfFollowing from "./routes/get/fetchIfFollowing";
+import fetchOtherPosts from "./routes/get/fetchOtherPosts";
 
 // Post
 import postUser from "./routes/post/createUser/postUser";
@@ -60,6 +61,7 @@ app.use("/dhruvsocial/get/forYouPosts", forYouPosts);
 app.use("/dhruvsocial/get/fetchUsersPosts", fetchUsersPosts);
 app.use("/dhruvsocial/get/searchUser", searchUser);
 app.use("/dhruvsocial/get/fetchIfFollowing", fetchIfFollowing);
+app.use("/dhruvsocial/get/fetchOtherPosts", fetchOtherPosts);
 
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
