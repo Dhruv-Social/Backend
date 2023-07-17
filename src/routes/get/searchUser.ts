@@ -5,11 +5,18 @@ import { redisClient } from "../../core/redis/redis";
 
 const searchUser: Router = express.Router();
 
-// Endpoint to get a users data
-searchUser.get("/", authToken, async (req: Request, res: Response) => {
-  const { user } = req.query;
+interface redisUser {
+  uuid: string;
+  profilePicture: string;
+  displayName: string;
+}
 
-  const userData: object[] = [];
+// Endpoint to get a users data
+searchUser.get("/", authToken, async (req: Request | any, res: Response) => {
+  const { user } = req.query;
+  const { uuid } = req.user;
+
+  const userData: redisUser[] = [];
 
   const similarUsersArr = await redisClient.keys(`*user:${user}*`);
 
@@ -23,9 +30,9 @@ searchUser.get("/", authToken, async (req: Request, res: Response) => {
     userData.push(JSON.parse(userJsonString));
   }
 
-  userData.filter((user: any) => user.uuid === user);
+  const filteredData = userData.filter((user: redisUser) => user.uuid !== uuid);
 
-  return res.send(userData);
+  return res.send(filteredData);
 });
 
 export default searchUser;
