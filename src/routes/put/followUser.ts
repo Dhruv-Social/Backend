@@ -69,7 +69,9 @@ followUser.put("/", authToken, async (req: Request | any, res: Response) => {
     },
   });
 
-  return res.send("success");
+  return res.json({
+    success: true,
+  });
 });
 
 export default followUser;

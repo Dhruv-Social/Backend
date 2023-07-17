@@ -22,6 +22,7 @@ import fetchUsersPosts from "./routes/get/fetchUserPost";
 import searchUser from "./routes/get/searchUser";
 import fetchIfFollowing from "./routes/get/fetchIfFollowing";
 import fetchOtherPosts from "./routes/get/fetchOtherPosts";
+import fetchIfPostLiked from "./routes/get/fetchIfLikedPost";
 
 // Post
 import postUser from "./routes/post/createUser/postUser";
@@ -38,6 +39,7 @@ import followUser from "./routes/put/followUser";
 import unfollowUser from "./routes/put/unfollowUser";
 import commentOnPost from "./routes/put/commentOnPost";
 import likePost from "./routes/put/likePost";
+import unLikePost from "./routes/put/unLikePost";
 
 const app: Application = express();
 const port: number = parseInt(process.env.API_PORT!);
@@ -62,6 +64,7 @@ app.use("/dhruvsocial/get/fetchUsersPosts", fetchUsersPosts);
 app.use("/dhruvsocial/get/searchUser", searchUser);
 app.use("/dhruvsocial/get/fetchIfFollowing", fetchIfFollowing);
 app.use("/dhruvsocial/get/fetchOtherPosts", fetchOtherPosts);
+app.use("/dhruvsocial/get/fetchIfPostLiked", fetchIfPostLiked);
 
 // Post
 app.use("/dhruvsocial/post/postUser", postUser);
@@ -78,6 +81,7 @@ app.use("/dhruvsocial/put/followUser", followUser);
 app.use("/dhruvsocial/put/unfollowUser", unfollowUser);
 app.use("/dhruvsocial/put/commentOnPost", commentOnPost);
 app.use("/dhruvsocial/put/likePost", likePost);
+app.use("/dhruvsocial/get/unlikePost", unLikePost);
 
 app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });

@@ -31,6 +31,7 @@ fetchOther.get("/", authToken, async (req: Request, res: Response) => {
       uuid: uuid,
     },
     select: {
+      uuid: true,
       username: true,
       display_name: true,
       description: true,
