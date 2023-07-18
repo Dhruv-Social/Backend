@@ -6,7 +6,7 @@ import { authToken } from "../../core/auth/auth";
 const fetchSelf: Router = express.Router();
 
 // Endpoint to get a users own data
-fetchSelf.get("/", authToken, async (req: Request | any, res: Response) => {
+fetchSelf.get("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.user;
 
   const user = await prisma.user.findUnique({

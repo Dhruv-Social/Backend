@@ -7,7 +7,7 @@ import { Post } from "@prisma/client";
 const forYouPosts: Router = express.Router();
 
 // Endpoint to get a users data
-forYouPosts.get("/", authToken, async (req: Request | any, res: Response) => {
+forYouPosts.get("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.user;
   const postsToReturn: Post[] = [];
 

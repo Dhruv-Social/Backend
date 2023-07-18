@@ -12,7 +12,7 @@ interface redisUser {
 }
 
 // Endpoint to get a users data
-searchUser.get("/", authToken, async (req: Request | any, res: Response) => {
+searchUser.get("/", authToken, async (req: Request, res: Response) => {
   const { user } = req.query;
   const { uuid } = req.user;
 

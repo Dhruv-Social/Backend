@@ -1,26 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-// export interface TokenData {
-//   uuid: string;
-//   scopes: {
-//     dhruv_canUpdateUsers: boolean;
-//     dhruv_canDeleteUsers: boolean;
-//     dhruv_canGod: boolean;
-//     canEditSelf: boolean;
-//     canMakePost: boolean;
-//     canCreateUser: boolean;
-//     canSendMessages: boolean;
-//     canUserFetchSelf: boolean;
-//     canReadOtherProfiles: boolean;
-//     canDeleteSelf: boolean;
-//   };
-//   iat: number;
-//   exp: number;
-// }
-// export interface TokenRequest extends Request {
-//   user: TokenData;
-// }
+import { User } from "core/types/custom";
 
 const authToken = (req: Request | any, res: Response, next: NextFunction) => {
   const auth_header = req.headers["authorization"];

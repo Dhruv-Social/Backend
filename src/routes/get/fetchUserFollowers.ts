@@ -7,50 +7,46 @@ import { IFollowerData } from "../../core/data/interfaces";
 const fetchUserFollowers: Router = express.Router();
 
 // Endpoint to get a users own data
-fetchUserFollowers.get(
-  "/",
-  authToken,
-  async (req: Request | any, res: Response) => {
-    const { uuid } = req.user;
+fetchUserFollowers.get("/", authToken, async (req: Request, res: Response) => {
+  const { uuid } = req.user;
 
-    const userFollowers = await prisma.user.findUnique({
+  const userFollowers = await prisma.user.findUnique({
+    where: {
+      uuid: uuid,
+    },
+    select: {
+      followers: true,
+    },
+  });
+
+  if (userFollowers === null) {
+    return res.send();
+  }
+
+  const arrOfFollowerData: IFollowerData[] = [];
+
+  for (let i = 0; i < userFollowers.followers.length; i++) {
+    const prismaReturn = await prisma.user.findUnique({
       where: {
-        uuid: uuid,
+        uuid: userFollowers.followers[i],
       },
       select: {
-        followers: true,
+        uuid: true,
+        username: true,
+        display_name: true,
+        profilePicture: true,
+        banner: true,
       },
     });
 
-    if (userFollowers === null) {
-      return res.send();
+    if (prismaReturn === null) {
+      return;
     }
 
-    const arrOfFollowerData: IFollowerData[] = [];
-
-    for (let i = 0; i < userFollowers.followers.length; i++) {
-      const prismaReturn = await prisma.user.findUnique({
-        where: {
-          uuid: userFollowers.followers[i],
-        },
-        select: {
-          uuid: true,
-          username: true,
-          display_name: true,
-          profilePicture: true,
-          banner: true,
-        },
-      });
-
-      if (prismaReturn === null) {
-        return;
-      }
-
-      arrOfFollowerData.push(prismaReturn);
-    }
-
-    return res.send(arrOfFollowerData);
+    arrOfFollowerData.push(prismaReturn);
   }
-);
+
+  return res.send(arrOfFollowerData);
+});
 
 export default fetchUserFollowers;
