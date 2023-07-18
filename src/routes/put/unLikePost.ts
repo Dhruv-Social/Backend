@@ -4,12 +4,19 @@ import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
 import { PutErrors } from "../../core/errors/errors";
 import { prisma } from "../../core/prisma/prisma";
+import { GetErrors } from "../../core/errors/errors";
 
 const unLikePost: Router = express.Router();
 
-unLikePost.put("/", authToken, async (req: Request | any, res: Response) => {
+unLikePost.put("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.user;
   const { postUuid } = req.query;
+
+  if (typeof postUuid !== "string") {
+    return res
+      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
+      .send(GetErrors.getUserDidNotProvideDetails());
+  }
 
   const arr = [postUuid];
 
@@ -19,7 +26,7 @@ unLikePost.put("/", authToken, async (req: Request | any, res: Response) => {
       .send(PutErrors.didNotProvideDetails());
 
   // Get the current likes
-  let likesOnPost = await prisma.post.findUnique({
+  const likesOnPost = await prisma.post.findUnique({
     where: {
       post_uuid: postUuid,
     },
@@ -36,7 +43,7 @@ unLikePost.put("/", authToken, async (req: Request | any, res: Response) => {
     return res.send({ detail: "You can not unlike a post you havent liked" });
   }
 
-  let filteredLikesList = likesOnPost.likes.filter(
+  const filteredLikesList = likesOnPost.likes.filter(
     (likeUuid) => likeUuid !== uuid
   );
 

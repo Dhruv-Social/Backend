@@ -4,12 +4,19 @@ import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
 import { PutErrors } from "../../core/errors/errors";
 import { prisma } from "../../core/prisma/prisma";
+import { GetErrors } from "../../core/errors/errors";
 
 const unfollowUser: Router = express.Router();
 
-unfollowUser.put("/", authToken, async (req: Request | any, res: Response) => {
+unfollowUser.put("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.user;
   const { uuidToUnfollow } = req.query;
+
+  if (typeof uuidToUnfollow !== "string") {
+    return res
+      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
+      .send(GetErrors.getUserDidNotProvideDetails());
+  }
 
   const arr: string[] = [uuid, uuidToUnfollow];
 

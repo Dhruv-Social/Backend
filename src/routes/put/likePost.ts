@@ -4,12 +4,19 @@ import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
 import { PutErrors } from "../../core/errors/errors";
 import { prisma } from "../../core/prisma/prisma";
+import { GetErrors } from "../../core/errors/errors";
 
 const likePost: Router = express.Router();
 
-likePost.put("/", authToken, async (req: Request | any, res: Response) => {
+likePost.put("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.user;
   const { postUuid } = req.query;
+
+  if (typeof postUuid !== "string") {
+    return res
+      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
+      .send(GetErrors.getUserDidNotProvideDetails());
+  }
 
   const arr = [postUuid];
 
@@ -18,7 +25,7 @@ likePost.put("/", authToken, async (req: Request | any, res: Response) => {
       .status(PutErrors.didNotProvideDetails().details.errorCode)
       .send(PutErrors.didNotProvideDetails());
 
-  let currentLikes = await prisma.post.findUnique({
+  const currentLikes = await prisma.post.findUnique({
     where: {
       post_uuid: postUuid,
     },

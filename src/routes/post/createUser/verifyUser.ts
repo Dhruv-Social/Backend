@@ -19,7 +19,7 @@ verifyUser.post("/", async (req: Request, res: Response) => {
   let payload;
 
   try {
-    payload = decryptToken(token!);
+    payload = decryptToken(token);
   } catch (err: any) {
     return res.send({ detail: err });
   }
@@ -68,7 +68,7 @@ verifyUser.post("/", async (req: Request, res: Response) => {
 
   try {
     await transporter.sendMail(options);
-  } catch (err: any) {
+  } catch (err) {
     return res
       .status(PostErrors.postUserEmailSendError().details.errorCode)
       .send(PostErrors.postUserEmailSendError());
