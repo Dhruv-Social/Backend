@@ -1,5 +1,7 @@
+// Express
 import express, { Request, Response, Router } from "express";
 
+// Local imports
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
 import { GetErrors } from "../../core/errors/errors";
