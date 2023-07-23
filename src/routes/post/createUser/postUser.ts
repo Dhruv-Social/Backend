@@ -7,6 +7,7 @@ import express, { Request, Response, Router } from "express";
 import fileUpload from "express-fileupload";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { UploadedFile } from "express-fileupload";
 
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { PostErrors } from "../../../core/errors/errors";
@@ -45,7 +46,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     return res.status(400).send("No files were uploaded.");
   }
 
-  const profilePicture =
+  const profilePicture: string =
     req.files.profilePicture !== undefined
       ? req.files.profilePicture.data.toString("base64")
       : defaultProfilePicture;

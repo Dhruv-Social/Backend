@@ -1,5 +1,7 @@
+// Express
 import express, { Request, Response, Router } from "express";
 
+// Local Imports
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
 import { GetErrors } from "../../core/errors/errors";
@@ -7,25 +9,29 @@ import { prisma } from "../../core/prisma/prisma";
 
 const fetchIfFollowing: Router = express.Router();
 
-// Endpoint to get another user
+/* 
+  This endpoint is to check if a user is following another
+*/
 fetchIfFollowing.get("/", authToken, async (req: Request, res: Response) => {
   const { ifFollowingUuid } = req.query;
   const { uuid } = req.user;
 
+  // If the type of the query parameter is not string, then we know what they provided was null
   if (typeof ifFollowingUuid !== "string") {
     return res.send("e");
   }
 
-  const arr: string[] = [uuid];
+  // Set an array of items to check
+  const arr: string[] = [ifFollowingUuid];
 
-  // Verifying the data inputed from the user
+  // Verifying the data inputted from the user
   if (!verifyArray(arr)) {
     return res
       .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
       .send(GetErrors.getUserDidNotProvideDetails());
   }
 
-  // Get the following list of the user we are checking
+  // Get the list of all the followers
   const followingArr = await prisma.user.findUnique({
     where: {
       uuid: ifFollowingUuid,

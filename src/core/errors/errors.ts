@@ -70,6 +70,16 @@ export class DeleteErrors extends Errors {
       },
     };
   }
+
+  static deleteYouCanNotDeleteAnotherPost() {
+    return {
+      success: false,
+      details: {
+        reason: "You can not delete a post that does not exist to you",
+        errorCode: 400,
+      },
+    };
+  }
 }
 
 export class GetErrors extends Errors {

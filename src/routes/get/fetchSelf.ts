@@ -1,44 +1,33 @@
+// Express
 import express, { Request, Response, Router } from "express";
 
+// Local Imports
 import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
+import { IUserString } from "core/data/interfaces";
 
 const fetchSelf: Router = express.Router();
 
-interface IUserString {
-  uuid: string;
-  username: string;
-  display_name: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  phonenumber: string;
-  password: string;
-  description: string;
-  location: string;
-  followers: string[];
-  following: string[];
-  verified: boolean;
-  posts: string[];
-  profilePicture: string;
-  banner: string;
-  creationDate: string;
-}
-
-// Endpoint to get a users own data
+/* 
+  Endpoint to fetch a specific user, from the token
+*/
 fetchSelf.get("/", authToken, async (req: Request, res: Response) => {
+  // Get the uuid from the request token
   const { uuid } = req.user;
 
+  // Get the user where the uuid is equal the the token uuid
   const user = await prisma.user.findUnique({
     where: {
       uuid: uuid,
     },
   });
 
+  // If prisma returns none, then we know the user does not exist
   if (user === null) {
     return res.send({ detail: "You do not exist" });
   }
 
+  // This is the return user object
   const returnUser: IUserString = {
     uuid: user.uuid,
     username: user.username,
@@ -59,6 +48,7 @@ fetchSelf.get("/", authToken, async (req: Request, res: Response) => {
     creationDate: user.creationDate.toString(),
   };
 
+  // Return the user
   return res.send(returnUser);
 });
 

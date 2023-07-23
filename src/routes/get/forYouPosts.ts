@@ -18,14 +18,10 @@ forYouPosts.get("/", authToken, async (req: Request, res: Response) => {
     },
     select: {
       following: true,
-      followers: true,
     },
   });
 
-  if (
-    followingAndFollowers?.followers === undefined ||
-    followingAndFollowers?.following === undefined
-  ) {
+  if (followingAndFollowers?.following === undefined) {
     return res.send("You are bad");
   }
 
@@ -35,18 +31,6 @@ forYouPosts.get("/", authToken, async (req: Request, res: Response) => {
       (await prisma.post.findMany({
         where: {
           author_uuid: followingAndFollowers?.following[i],
-        },
-      })) ?? [];
-
-    postsToReturn.push(...tmp);
-  }
-
-  // Second we get their followers posts
-  for (let i = 0; i < followingAndFollowers?.followers.length; i++) {
-    const tmp =
-      (await prisma.post.findMany({
-        where: {
-          author_uuid: followingAndFollowers?.followers[i],
         },
       })) ?? [];
 
