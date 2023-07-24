@@ -11,7 +11,7 @@ import { GetErrors } from "../../core/errors/errors";
 const fetchOtherPosts: Router = express.Router();
 
 /* 
-  Endpoint to get the user posts
+  Endpoint to get another users posts
 */
 fetchOtherPosts.get("/", authToken, async (req: Request, res: Response) => {
   // Get data from the request

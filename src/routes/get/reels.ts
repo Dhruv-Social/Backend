@@ -10,7 +10,7 @@ import { authToken } from "../../core/auth/auth";
 const reels: Router = express.Router();
 
 /* 
-  Endpoint to get a users own data 
+  Endpoint to get reels for a user 
 */
 reels.get("/", authToken, async (req: Request, res: Response) => {
   // Read the directory

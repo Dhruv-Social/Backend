@@ -9,7 +9,7 @@ import { IFollowerData } from "../../core/data/interfaces";
 const fetchUserFollowers: Router = express.Router();
 
 /*
-  Endpoint to get a users own data
+  Endpoint to fetch a users followers
 */
 fetchUserFollowers.get("/", authToken, async (req: Request, res: Response) => {
   // Get the uuid from the requet token

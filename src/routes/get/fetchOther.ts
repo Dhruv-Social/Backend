@@ -9,7 +9,9 @@ import { prisma } from "../../core/prisma/prisma";
 
 const fetchOther: Router = express.Router();
 
-// Endpoint to get another user
+/* 
+  Endpoint to fetch another user 
+*/
 fetchOther.get("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.query;
 

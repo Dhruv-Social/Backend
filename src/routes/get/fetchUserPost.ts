@@ -7,7 +7,7 @@ import { Post } from "@prisma/client";
 const fetchUsersPosts: Router = express.Router();
 
 /* 
-  Endpoint to get the user posts
+  Endpoint to get self's posts
 */
 fetchUsersPosts.get("/", authToken, async (req: Request, res: Response) => {
   const { uuid } = req.user;

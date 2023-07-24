@@ -10,7 +10,7 @@ import { prisma } from "../../core/prisma/prisma";
 const fetchIfPostLiked: Router = express.Router();
 
 /* 
-  Endpoint to get another user
+  Endpoint to fetch if I have liked a post
 */
 fetchIfPostLiked.get("/", authToken, async (req: Request, res: Response) => {
   // Getting data from the request
