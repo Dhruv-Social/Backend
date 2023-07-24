@@ -3,9 +3,11 @@
   will verify the user
 */
 
+// Node imports
 import express, { Request, Response, Router } from "express";
 import nodemailer from "nodemailer";
 
+// Local imports
 import { decryptToken } from "../../../core/jwt/jwt";
 import { prisma } from "../../../core/prisma/prisma";
 import { PostErrors } from "../../../core/errors/errors";
@@ -13,11 +15,16 @@ import { redisClient } from "../../../core/redis/redis";
 
 const verifyUser: Router = express.Router();
 
+/* 
+  Endpoint to post a user with no email auth 
+*/
 verifyUser.post("/", async (req: Request, res: Response) => {
+  // Get the token from the body
   const { token } = req.body;
 
   let payload;
 
+  // Get the uuid from the token
   try {
     payload = decryptToken(token);
   } catch (err: any) {
@@ -26,6 +33,7 @@ verifyUser.post("/", async (req: Request, res: Response) => {
 
   const { uuid } = payload;
 
+  // Update the prisma user to verify the user
   await prisma.user.update({
     where: {
       uuid: uuid,
@@ -35,6 +43,7 @@ verifyUser.post("/", async (req: Request, res: Response) => {
     },
   });
 
+  // Get the data from the database to add to the redis cache
   const user = await prisma.user.findUnique({
     where: {
       uuid: uuid,
