@@ -9,7 +9,7 @@ import { IUserString } from "core/data/interfaces";
 const fetchSelf: Router = express.Router();
 
 /* 
-  Endpoint to fetch a user from the token provided in the request header
+  Endpoint to fetch a user from the token provided in the request headers
 */
 fetchSelf.get("/", authToken, async (req: Request, res: Response) => {
   // Get the uuid from the request token

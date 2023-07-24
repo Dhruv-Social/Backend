@@ -3,10 +3,12 @@
   authentication
 */
 
+// Node imports
 import express, { Request, Response, Router } from "express";
 import fileUpload from "express-fileupload";
 import crypto from "crypto";
 
+// Local imports
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { PostErrors } from "../../../core/errors/errors";
 import { hashPassword } from "../../../core/argon2/argon";
@@ -25,11 +27,14 @@ import { redisClient } from "../../../core/redis/redis";
 
 const postUserNoAuth: Router = express.Router();
 
-// This route is to get a user based on their username
+/* 
+  Endpoint to post a user with no email auth 
+*/
 postUserNoAuth.post(
   "/",
   fileUpload(),
   async (req: Request | any, res: Response) => {
+    // Request data
     const {
       username,
       display_name,
@@ -42,11 +47,7 @@ postUserNoAuth.post(
       location,
     } = req.body;
 
-    // Checking to make sure the files were uploaded
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send("No files were uploaded.");
-    }
-
+    // Checking if the images are undefined, if so we just give them the default datas
     const profilePicture =
       req.files.profilePicture !== undefined
         ? req.files.profilePicture.data.toString("base64")
@@ -75,18 +76,21 @@ postUserNoAuth.post(
         .send(PostErrors.postUserInvalidDetails());
     }
 
+    // Verify the username
     if (!verifyUsername(username)) {
       return res
         .status(PostErrors.postUserUsernameFailed().details.errorCode)
         .send(PostErrors.postUserUsernameFailed());
     }
 
+    // Verify the password
     if (!verifyPassword(password)) {
       return res
         .status(PostErrors.postUserPasswordFailed().details.errorCode)
         .send(PostErrors.postUserPasswordFailed());
     }
 
+    // Verify the location
     if (!verifyLocation(location)) {
       return res
         .status(PostErrors.postUserLocationFailed().details.errorCode)
@@ -121,9 +125,7 @@ postUserNoAuth.post(
       },
     });
 
-    /* 
-      If prisma returns null, then we know what we queried does not exist
-    */
+    // Checking to make sure the the user with that username does exist, if so, we return an error
     if (prismaReturn !== null) {
       return res
         .status(PostErrors.postUserUserWithUsernameExists().details.errorCode)

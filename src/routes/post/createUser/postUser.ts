@@ -3,12 +3,14 @@
   them a verification email
 */
 
+// Node imports
 import express, { Request, Response, Router } from "express";
 import fileUpload from "express-fileupload";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import { UploadedFile } from "express-fileupload";
 
+// Local imports
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { PostErrors } from "../../../core/errors/errors";
 import { hashPassword } from "../../../core/argon2/argon";
@@ -27,8 +29,11 @@ import {
 
 const postUser: Router = express.Router();
 
-// This route is to get a user based on their username
+/* 
+  Endpoint to post a user to the database (NOT VERIFIED)
+*/
 postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
+  // Request data
   const {
     username,
     display_name,
@@ -41,11 +46,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     location,
   } = req.body;
 
-  // Checking to make sure the files were uploaded
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send("No files were uploaded.");
-  }
-
+  // Checking if the images are undefined, if so we just give them the default data
   const profilePicture: string =
     req.files.profilePicture !== undefined
       ? req.files.profilePicture.data.toString("base64")
@@ -74,18 +75,21 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
       .send(PostErrors.postUserInvalidDetails());
   }
 
+  // Verifying the username
   if (!verifyUsername(username)) {
     return res
       .status(PostErrors.postUserUsernameFailed().details.errorCode)
       .send(PostErrors.postUserUsernameFailed());
   }
 
+  // Verify the password
   if (!verifyPassword(password)) {
     return res
       .status(PostErrors.postUserPasswordFailed().details.errorCode)
       .send(PostErrors.postUserPasswordFailed());
   }
 
+  // Verify the location
   if (!verifyLocation(location)) {
     return res
       .status(PostErrors.postUserLocationFailed().details.errorCode)
@@ -120,18 +124,22 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     },
   });
 
+  // The prisma return is NOT null, then we know that a user with that usernamee exists
   if (prismaReturn !== null) {
     return res
       .status(PostErrors.postUserUserWithUsernameExists().details.errorCode)
       .send(PostErrors.postUserUserWithUsernameExists());
   }
 
+  // Object to put in the token
   const createTokenData: IPostToken = {
     uuid: user.uuid,
   };
 
+  // Create the token
   const postUserToken = createToken(createTokenData);
 
+  // Sending an email to the user
   const transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
