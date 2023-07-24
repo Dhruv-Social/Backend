@@ -5,7 +5,7 @@ import express, { Request, Response, Router } from "express";
 import { prisma } from "../../core/prisma/prisma";
 import { DeleteErrors } from "../../core/errors/errors";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { authToken } from "core/auth/auth";
+import { authToken } from "../../core/auth/auth";
 
 const deletePost: Router = express.Router();
 
