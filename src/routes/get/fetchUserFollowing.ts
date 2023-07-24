@@ -5,6 +5,7 @@ import express, { Request, Response, Router } from "express";
 import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
 import { IFollowingData } from "../../core/data/interfaces";
+import { GetErrors } from "core/errors/getErrors";
 
 const fetchUserFollowing: Router = express.Router();
 
@@ -24,7 +25,9 @@ fetchUserFollowing.get("/", authToken, async (req: Request, res: Response) => {
   });
 
   if (userFollowing === null) {
-    return res.send();
+    return res
+      .status(GetErrors.userDoesNotExist().details.errorCode)
+      .send(GetErrors.userDoesNotExist());
   }
 
   const arrOfFollowingData: IFollowingData[] = [];

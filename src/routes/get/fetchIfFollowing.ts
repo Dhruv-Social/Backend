@@ -4,7 +4,8 @@ import express, { Request, Response, Router } from "express";
 // Local Imports
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { GetErrors } from "../../core/errors/errors";
+import { Errors } from "core/errors/errors";
+import { GetErrors } from "core/errors/getErrors";
 import { prisma } from "../../core/prisma/prisma";
 
 const fetchIfFollowing: Router = express.Router();
@@ -41,8 +42,11 @@ fetchIfFollowing.get("/", authToken, async (req: Request, res: Response) => {
     },
   });
 
+  // If the prisma return is null, then we know that the token is no expired, and
   if (followingArr === null) {
-    return res.status(400).send({ detail: "This user does not exist" });
+    return res
+      .status(GetErrors.userDoesNotExist().details.errorCode)
+      .send(GetErrors.userDoesNotExist());
   }
 
   const isFollowing = followingArr.followers.includes(uuid);

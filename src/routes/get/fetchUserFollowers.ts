@@ -5,6 +5,7 @@ import express, { Request, Response, Router } from "express";
 import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
 import { IFollowerData } from "../../core/data/interfaces";
+import { GetErrors } from "core/errors/getErrors";
 
 const fetchUserFollowers: Router = express.Router();
 
@@ -27,7 +28,9 @@ fetchUserFollowers.get("/", authToken, async (req: Request, res: Response) => {
 
   // If the users following is null, then we know the user does not exist
   if (userFollowers === null) {
-    return res.send();
+    return res
+      .status(GetErrors.userDoesNotExist().details.errorCode)
+      .send(GetErrors.userDoesNotExist());
   }
 
   // Instantiate array with set type
@@ -49,9 +52,11 @@ fetchUserFollowers.get("/", authToken, async (req: Request, res: Response) => {
       },
     });
 
-    // If the return is null, then we know the user does not exist
+    // If the return user is null, then we know that user does not exist
     if (prismaReturn === null) {
-      return;
+      return res
+        .status(GetErrors.userDoesNotExist().details.errorCode)
+        .send(GetErrors.userDoesNotExist());
     }
 
     // Append the item to the array

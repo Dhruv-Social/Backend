@@ -4,7 +4,7 @@ import express, { Request, Response, Router } from "express";
 // Local Imports
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { GetErrors } from "../../core/errors/errors";
+import { GetErrors } from "core/errors/getErrors";
 import { prisma } from "../../core/prisma/prisma";
 
 const fetchIfPostLiked: Router = express.Router();
@@ -19,7 +19,9 @@ fetchIfPostLiked.get("/", authToken, async (req: Request, res: Response) => {
 
   // If the post uuid is not a string, then we know the user entered some bogus binted data 👽
   if (typeof postUuid !== "string") {
-    return res.send("e");
+    return res
+      .status(GetErrors.anItemIsNotAString().details.errorCode)
+      .send(GetErrors.anItemIsNotAString());
   }
 
   const arr: string[] = [postUuid];
@@ -44,8 +46,8 @@ fetchIfPostLiked.get("/", authToken, async (req: Request, res: Response) => {
   // If the postgres data return is null, then it does not exist
   if (postLikes === null) {
     return res
-      .status(400)
-      .send({ detail: "The post you requested does not exist" });
+      .status(GetErrors.postDoesNotExist().details.errorCode)
+      .send(GetErrors.postDoesNotExist());
   }
 
   // If is liked is false, then we know that we have not liked that post

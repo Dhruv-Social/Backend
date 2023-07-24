@@ -6,7 +6,7 @@ import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
 import { Post } from "@prisma/client";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { GetErrors } from "../../core/errors/errors";
+import { GetErrors } from "core/errors/getErrors";
 
 const fetchOtherPosts: Router = express.Router();
 
@@ -20,8 +20,8 @@ fetchOtherPosts.get("/", authToken, async (req: Request, res: Response) => {
   // If the post uuid is not a string, then we know the user entered some bogus binted data 👽
   if (typeof uuid !== "string") {
     return res
-      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
-      .send(GetErrors.getUserDidNotProvideDetails());
+      .status(GetErrors.anItemIsNotAString().details.errorCode)
+      .send(GetErrors.anItemIsNotAString());
   }
 
   // Verifying the data inputed from the user

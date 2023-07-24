@@ -4,7 +4,7 @@ import express, { Request, Response, Router } from "express";
 // Local imports
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { GetErrors } from "../../core/errors/errors";
+import { GetErrors } from "core/errors/getErrors";
 import { prisma } from "../../core/prisma/prisma";
 
 const fetchOther: Router = express.Router();
@@ -17,8 +17,8 @@ fetchOther.get("/", authToken, async (req: Request, res: Response) => {
 
   if (typeof uuid !== "string") {
     return res
-      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
-      .send(GetErrors.getUserDidNotProvideDetails());
+      .status(GetErrors.anItemIsNotAString().details.errorCode)
+      .send(GetErrors.anItemIsNotAString());
   }
 
   const arr: string[] = [uuid];

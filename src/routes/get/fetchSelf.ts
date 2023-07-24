@@ -5,6 +5,7 @@ import express, { Request, Response, Router } from "express";
 import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
 import { IUserString } from "core/data/interfaces";
+import { GetErrors } from "core/errors/getErrors";
 
 const fetchSelf: Router = express.Router();
 
@@ -24,7 +25,9 @@ fetchSelf.get("/", authToken, async (req: Request, res: Response) => {
 
   // If prisma returns none, then we know the user does not exist
   if (user === null) {
-    return res.send({ detail: "You do not exist" });
+    return res
+      .status(GetErrors.userDoesNotExist().details.errorCode)
+      .send(GetErrors.userDoesNotExist());
   }
 
   // This is the return user object
