@@ -10,17 +10,23 @@ import { prisma } from "../../../core/prisma/prisma";
 
 const createPost: Router = express.Router();
 
-// Reminder to get the post UUID from the token
+/* 
+  Endpoint to create a post
+*/
 createPost.post(
   "/",
   authToken,
   fileUpload(),
   async (req: Request | any, res: Response) => {
+    // Request data
     const { text } = req.body;
     const { uuid } = req.user;
 
+    // Instantiate the post images
     let media1: string, media2: string, media3: string, media4: string;
 
+    // If the data is null, the app with crash, so I am using a try catch to prevent that.
+    // If the app does crash, then we know that the data is null, and we set that data to null
     try {
       media1 = req.files.media1.data.toString("base64");
     } catch (err: any) {
@@ -45,8 +51,10 @@ createPost.post(
       media4 = "null";
     }
 
+    // Store the data in an array
     const media: string[] = [media1, media2, media3, media4];
 
+    // Verify the data
     const arr: string[] = [text];
 
     if (!verifyArray(arr)) {
@@ -55,6 +63,7 @@ createPost.post(
         .send(PostErrors.postUserInvalidDetails());
     }
 
+    // get the user data
     const userData = await prisma.user.findUnique({
       where: {
         uuid: uuid,
@@ -66,10 +75,12 @@ createPost.post(
       },
     });
 
+    // If the userdata is null, then we return an error
     if (userData === null) {
       return res.send("err");
     }
 
+    // Create a post object
     const post: Post = {
       post_uuid: crypto.randomUUID(),
       author_uuid: uuid,
@@ -82,6 +93,7 @@ createPost.post(
       media: media,
     };
 
+    // Add the post to the user posts array
     await prisma.user.update({
       data: {
         posts: {
@@ -93,6 +105,7 @@ createPost.post(
       },
     });
 
+    // Create the post
     await prisma.post.create({
       data: {
         post_uuid: post.post_uuid,
@@ -107,6 +120,7 @@ createPost.post(
       },
     });
 
+    // Return successs
     return res.send("success!");
   }
 );
