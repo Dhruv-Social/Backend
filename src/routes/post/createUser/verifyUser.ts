@@ -10,7 +10,7 @@ import nodemailer from "nodemailer";
 // Local imports
 import { decryptToken } from "../../../core/jwt/jwt";
 import { prisma } from "../../../core/prisma/prisma";
-import { PostErrors } from "../../../core/errors/errors";
+import { PostErrors } from "../../../core/errors/postErrors";
 import { redisClient } from "../../../core/redis/redis";
 
 const verifyUser: Router = express.Router();

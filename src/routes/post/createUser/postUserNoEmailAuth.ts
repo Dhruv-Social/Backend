@@ -10,7 +10,7 @@ import crypto from "crypto";
 
 // Local imports
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
-import { PostErrors } from "../../../core/errors/errors";
+import { PostErrors } from "../../../core/errors/postErrors";
 import { hashPassword } from "../../../core/argon2/argon";
 import {
   verifyUsername,

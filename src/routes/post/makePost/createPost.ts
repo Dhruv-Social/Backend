@@ -4,7 +4,7 @@ import fileUpload from "express-fileupload";
 
 import { Post } from "@prisma/client";
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
-import { PostErrors } from "../../../core/errors/errors";
+import { PostErrors } from "../../../core/errors/postErrors";
 import { authToken } from "../../../core/auth/auth";
 import { prisma } from "../../../core/prisma/prisma";
 
@@ -77,7 +77,9 @@ createPost.post(
 
     // If the userdata is null, then we return an error
     if (userData === null) {
-      return res.send("err");
+      return res
+        .status(PostErrors.createPostUserDoesNotExist().details.errorCode)
+        .send(PostErrors.createPostUserDoesNotExist());
     }
 
     // Create a post object
