@@ -20,42 +20,6 @@ export class Errors {
   }
 }
 
-export class PutErrors extends Errors {
-  private constructor() {
-    super();
-  }
-
-  static followUserYouAlreadyFollow() {
-    return {
-      success: false,
-      details: {
-        reason: "You already follow this user",
-        errorCode: 400,
-      },
-    };
-  }
-
-  static unfollowUserYouDontFollow() {
-    return {
-      success: false,
-      details: {
-        reason: "You can not unfollow a user you don't follow",
-        errorCode: 400,
-      },
-    };
-  }
-
-  static followUserIncorrectUuid() {
-    return {
-      success: false,
-      details: {
-        reason: "This UUID does not exis in the database",
-        errorCode: 400,
-      },
-    };
-  }
-}
-
 export class DeleteErrors extends Errors {
   private constructor() {
     super();

@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from "express";
 
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { GetErrors, PutErrors } from "../../core/errors/errors";
+import { PutErrors } from "../../core/errors/putErrors";
 import { prisma } from "../../core/prisma/prisma";
 
 const followUser: Router = express.Router();
@@ -14,8 +14,8 @@ followUser.put("/", authToken, async (req: Request, res: Response) => {
 
   if (typeof uuidToFollow !== "string") {
     return res
-      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
-      .send(GetErrors.getUserDidNotProvideDetails());
+      .status(PutErrors.anItemIsNotAString().details.errorCode)
+      .send(PutErrors.anItemIsNotAString());
   }
 
   const arr: string[] = [uuid, uuidToFollow];

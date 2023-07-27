@@ -2,9 +2,8 @@ import express, { Request, Response, Router } from "express";
 
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { PutErrors } from "../../core/errors/errors";
+import { PutErrors } from "../../core/errors/putErrors";
 import { prisma } from "../../core/prisma/prisma";
-import { GetErrors } from "../../core/errors/errors";
 
 const unfollowUser: Router = express.Router();
 
@@ -14,8 +13,8 @@ unfollowUser.put("/", authToken, async (req: Request, res: Response) => {
 
   if (typeof uuidToUnfollow !== "string") {
     return res
-      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
-      .send(GetErrors.getUserDidNotProvideDetails());
+      .status(PutErrors.anItemIsNotAString().details.errorCode)
+      .send(PutErrors.anItemIsNotAString());
   }
 
   const arr: string[] = [uuid, uuidToUnfollow];

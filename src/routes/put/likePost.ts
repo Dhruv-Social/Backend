@@ -2,9 +2,8 @@ import express, { Request, Response, Router } from "express";
 
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { PutErrors } from "../../core/errors/errors";
+import { PutErrors } from "../../core/errors/putErrors";
 import { prisma } from "../../core/prisma/prisma";
-import { GetErrors } from "../../core/errors/errors";
 
 const likePost: Router = express.Router();
 
@@ -14,8 +13,8 @@ likePost.put("/", authToken, async (req: Request, res: Response) => {
 
   if (typeof postUuid !== "string") {
     return res
-      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
-      .send(GetErrors.getUserDidNotProvideDetails());
+      .status(PutErrors.anItemIsNotAString().details.errorCode)
+      .send(PutErrors.anItemIsNotAString());
   }
 
   const arr = [postUuid];
@@ -35,11 +34,15 @@ likePost.put("/", authToken, async (req: Request, res: Response) => {
   });
 
   if (currentLikes === null) {
-    return res.send("This post does not exist");
+    return res
+      .status(PutErrors.canNotLikeAPostThatDoesNotExist().details.errorCode)
+      .send(PutErrors.canNotLikeAPostThatDoesNotExist());
   }
 
   if (currentLikes.likes.includes(uuid)) {
-    return res.send("You can not like a post you've already liked");
+    return res
+      .status(PutErrors.youveAlreadyLikedThisPost().details.errorCode)
+      .send(PutErrors.youveAlreadyLikedThisPost());
   }
 
   await prisma.post.update({

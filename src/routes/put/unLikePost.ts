@@ -2,9 +2,8 @@ import express, { Request, Response, Router } from "express";
 
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { PutErrors } from "../../core/errors/errors";
+import { PutErrors } from "../../core/errors/putErrors";
 import { prisma } from "../../core/prisma/prisma";
-import { GetErrors } from "../../core/errors/errors";
 
 const unLikePost: Router = express.Router();
 
@@ -14,8 +13,8 @@ unLikePost.put("/", authToken, async (req: Request, res: Response) => {
 
   if (typeof postUuid !== "string") {
     return res
-      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
-      .send(GetErrors.getUserDidNotProvideDetails());
+      .status(PutErrors.anItemIsNotAString().details.errorCode)
+      .send(PutErrors.anItemIsNotAString());
   }
 
   const arr = [postUuid];
@@ -36,11 +35,15 @@ unLikePost.put("/", authToken, async (req: Request, res: Response) => {
   });
 
   if (likesOnPost === null) {
-    return res.send({ detail: "This item does not exist" });
+    return res
+      .status(PutErrors.canNotLikeAPostThatDoesNotExist().details.errorCode)
+      .send(PutErrors.canNotLikeAPostThatDoesNotExist());
   }
 
   if (!likesOnPost.likes.includes(uuid)) {
-    return res.send({ detail: "You can not unlike a post you havent liked" });
+    return res
+      .status(PutErrors.youHaveNotLikedThisPost().details.errorCode)
+      .send(PutErrors.youHaveNotLikedThisPost());
   }
 
   const filteredLikesList = likesOnPost.likes.filter(

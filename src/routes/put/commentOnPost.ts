@@ -3,10 +3,9 @@ import crypto from "crypto";
 
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { PutErrors } from "../../core/errors/errors";
+import { PutErrors } from "../../core/errors/putErrors";
 import { prisma } from "../../core/prisma/prisma";
 import { IPostComment } from "../../core/data/interfaces";
-import { GetErrors } from "../../core/errors/errors";
 
 const commentOnPost: Router = express.Router();
 
@@ -18,8 +17,8 @@ commentOnPost.put("/", authToken, async (req: Request, res: Response) => {
 
   if (typeof postUuid !== "string") {
     return res
-      .status(GetErrors.getUserDidNotProvideDetails().details.errorCode)
-      .send(GetErrors.getUserDidNotProvideDetails());
+      .status(PutErrors.putCommentPostDidNotProvideDetails().details.errorCode)
+      .send(PutErrors.putCommentPostDidNotProvideDetails());
   }
 
   const arr = [commentText, postUuid];
