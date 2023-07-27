@@ -3,7 +3,7 @@ import express, { Request, Response, Router } from "express";
 
 // Local Imports
 import { prisma } from "../../core/prisma/prisma";
-import { DeleteErrors } from "../../core/errors/errors";
+import { DeleteErrors } from "../../core/errors/deleteErrors";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
 import { authToken } from "../../core/auth/auth";
 

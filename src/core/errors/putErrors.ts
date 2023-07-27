@@ -75,7 +75,7 @@ export class PutErrors extends Errors {
     };
   }
 
-  static youveAlreadyLikedThisPost() {
+  static youHaveNotLikedThisPost() {
     return {
       success: false,
       details: {
