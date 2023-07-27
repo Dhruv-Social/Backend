@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs";
 
 // Local imports
-import { GetErrors } from "../../core/errors/errors";
+import { GetErrors } from "../../core/errors/getErrors";
 import { authToken } from "../../core/auth/auth";
 
 const reels: Router = express.Router();
