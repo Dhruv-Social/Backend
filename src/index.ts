@@ -9,6 +9,7 @@ dotenv.config();
 // Import Routes
 // Auth
 import loginAuth from "./core/auth/login";
+import loginRefresh from "./core/auth/refreshLogin";
 
 // Get
 import fetchSelf from "./routes/get/fetchSelf";
@@ -51,6 +52,7 @@ app.use(cors());
 // Use Routes
 // Auth
 app.use("/dhruvsocial/auth/loginAuth", loginAuth);
+app.use("/dhruvsocial/auth/loginAuth/refresh", loginRefresh);
 
 // Get
 app.use("/dhruvsocial/get/fetchSelf", fetchSelf);

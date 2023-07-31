@@ -4,7 +4,7 @@ import express, { Request, Response, Router } from "express";
 // Local imports
 import { authToken } from "../../core/auth/auth";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { GetErrors } from "core/errors/getErrors";
+import { GetErrors } from "../../core/errors/getErrors";
 import { prisma } from "../../core/prisma/prisma";
 
 const fetchOther: Router = express.Router();

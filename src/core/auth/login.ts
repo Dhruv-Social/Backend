@@ -7,7 +7,7 @@ import {
   ITokenPayload,
   ITokenPayloadScopes,
 } from "../data/interfaces";
-import { PostErrors, AuthErrors } from "../errors/errors";
+import { AuthErrors } from "../errors/authErrors";
 import { verifyArray } from "../verifyArray/verifyArray";
 import {
   createToken,
@@ -31,44 +31,6 @@ const scopes: ITokenPayloadScopes = {
   canDeleteSelf: true,
 };
 
-loginAuth.post("/refresh", async (req: Request, res: Response) => {
-  const { token } = req.body;
-
-  const arr = [token];
-
-  if (!verifyArray(arr))
-    return res
-      .status(AuthErrors.didNotProvideDetails().details.errorCode)
-      .send(AuthErrors.didNotProvideDetails());
-
-  let tokenData;
-
-  try {
-    tokenData = decryptTokenRefresh(token);
-  } catch (err) {
-    return res.status(400).send({ detail: "How dare you give me a bad token" });
-  }
-
-  const redisRes = await redisClient.get(`token:${tokenData.uuid}`);
-
-  if (redisRes === null)
-    return res.status(400).send({ detail: "You do not exist in the database" });
-
-  if (redisRes !== token)
-    return res.status(400).send({
-      detail: "You must only use a new your latest refresh token",
-    });
-
-  const tokenDataRefresh: ITokenPayload = {
-    uuid: tokenData.uuid,
-    scopes: scopes,
-  };
-
-  res.send({
-    accessToken: createToken(tokenDataRefresh),
-  });
-});
-
 loginAuth.post("/", async (req: Request | any, res: Response) => {
   const { username, password } = req.body;
 
@@ -76,8 +38,8 @@ loginAuth.post("/", async (req: Request | any, res: Response) => {
 
   if (!verifyArray(arr)) {
     return res
-      .status(PostErrors.postUserInvalidDetails().details.errorCode)
-      .send(PostErrors.postUserInvalidDetails());
+      .status(AuthErrors.didNotProvideDetails().details.errorCode)
+      .send(AuthErrors.didNotProvideDetails());
   }
 
   const user: IUserLogin = {

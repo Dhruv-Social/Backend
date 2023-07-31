@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
 
 import { ITokenPayload, ITokenPayloadScopes } from "../data/interfaces";
-import { AuthErrors } from "../errors/errors";
+import { AuthErrors } from "../errors/authErrors";
 import { verifyArray } from "../verifyArray/verifyArray";
 import { createToken, decryptTokenRefresh } from "../jwt/jwt";
 import { redisClient } from "../redis/redis";

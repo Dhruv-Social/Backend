@@ -6,7 +6,7 @@ import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
 import { Post } from "@prisma/client";
 import { verifyArray } from "../../core/verifyArray/verifyArray";
-import { GetErrors } from "core/errors/getErrors";
+import { GetErrors } from "../../core/errors/getErrors";
 
 const fetchOtherPosts: Router = express.Router();
 

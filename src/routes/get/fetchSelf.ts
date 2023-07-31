@@ -4,8 +4,8 @@ import express, { Request, Response, Router } from "express";
 // Local Imports
 import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
-import { IUserString } from "core/data/interfaces";
-import { GetErrors } from "core/errors/getErrors";
+import { IUserString } from "../../core/data/interfaces";
+import { GetErrors } from "../../core/errors/getErrors";
 
 const fetchSelf: Router = express.Router();
 

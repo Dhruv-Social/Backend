@@ -5,7 +5,7 @@ import express, { Request, Response, Router } from "express";
 import { prisma } from "../../core/prisma/prisma";
 import { authToken } from "../../core/auth/auth";
 import { IFollowerData } from "../../core/data/interfaces";
-import { GetErrors } from "core/errors/getErrors";
+import { GetErrors } from "../../core/errors/getErrors";
 
 const fetchUserFollowers: Router = express.Router();
 
