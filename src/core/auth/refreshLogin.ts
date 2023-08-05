@@ -24,6 +24,7 @@ const scopes: ITokenPayloadScopes = {
 loginRefresh.post("/", async (req: Request, res: Response) => {
   const { token } = req.body;
 
+  // Verify that the token is not null
   const arr = [token];
 
   if (!verifyArray(arr))
@@ -33,28 +34,37 @@ loginRefresh.post("/", async (req: Request, res: Response) => {
 
   let tokenData;
 
+  // If the decryptToken funciton fails, then we know the token was bad
   try {
     tokenData = decryptTokenRefresh(token);
   } catch (err) {
-    return res.status(400).send({ detail: "How dare you give me a bad token" });
+    return res
+      .status(AuthErrors.authFailedToken().details.errorCode)
+      .send(AuthErrors.authFailedToken());
   }
 
   const redisRes = await redisClient.get(`token:${tokenData.uuid}`);
 
+  // If the redis returns null, then we know that the token does not exist
   if (redisRes === null)
-    return res.status(400).send({ detail: "You do not exist in the database" });
+    return res
+      .status(AuthErrors.authTokenDoesNotExistInRedisCache().details.errorCode)
+      .send(AuthErrors.authTokenDoesNotExistInRedisCache());
 
+  // They are using an old refreshToken, if this is true, then we deny the user to get another accessToken
   if (redisRes !== token)
-    return res.status(400).send({
-      detail: "You must only use a new your latest refresh token",
-    });
+    return res
+      .status(AuthErrors.authOldRefreshToken().details.errorCode)
+      .send(AuthErrors.authOldRefreshToken());
 
+  // Token Payload
   const tokenDataRefresh: ITokenPayload = {
     uuid: tokenData.uuid,
     scopes: scopes,
   };
 
-  res.send({
+  // Return the token
+  return res.send({
     accessToken: createToken(tokenDataRefresh),
   });
 });
