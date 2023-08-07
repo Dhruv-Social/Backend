@@ -1,8 +1,11 @@
 import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { redisClient } from "./core/redis/redis";
+import http from "http";
+import { Server, Socket } from "socket.io";
 import { autoDeleteUsers } from "./core/utilities/deleteUser";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import { authSocket } from "./sockets/middleware/auth";
 
 dotenv.config();
 
@@ -43,6 +46,10 @@ import likePost from "./routes/put/likePost";
 import unLikePost from "./routes/put/unLikePost";
 
 const app: Application = express();
+const server = http.createServer(app);
+
+const io = new Server(server, { cors: { origin: "*" } });
+
 const port: number = parseInt(process.env.API_PORT!);
 const devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
 
@@ -89,6 +96,39 @@ app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });
 });
 
+io.use(authSocket);
+
+interface privateMessageType {
+  from: string;
+  to: string;
+  message: string;
+}
+
+let connectedUsers: {
+  [key: string]: Socket<
+    DefaultEventsMap,
+    DefaultEventsMap,
+    DefaultEventsMap,
+    any
+  >;
+} = {};
+
+io.on("connection", (socket) => {
+  connectedUsers[socket.username] = socket;
+
+  socket.on("message", (message: privateMessageType) => {
+    connectedUsers[message.to].emit("privateMessage", {
+      from: socket.username,
+      to: connectedUsers[message.to].username,
+      message: message.message,
+    });
+  });
+
+  socket.on("disconnect", () => {
+    delete connectedUsers[socket.username];
+  });
+});
+
 // Fallback
 app.all("*", async (req: Request, res: Response) => {
   return res.send({
@@ -97,7 +137,7 @@ app.all("*", async (req: Request, res: Response) => {
   });
 });
 
-app.listen(port, async () => {
+server.listen(port, async () => {
   console.log(`Listening on port ${port}`);
   autoDeleteUsers();
 });
