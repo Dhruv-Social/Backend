@@ -1,3 +1,4 @@
+import { redisClient } from "../redis/redis";
 import jwt from "jsonwebtoken";
 
 /**
@@ -39,4 +40,37 @@ const decryptTokenRefresh = (token: any): any => {
   return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!);
 };
 
-export { createToken, createRefreshToken, decryptToken, decryptTokenRefresh };
+/**
+ * Function to verify a JWT token
+ * @param token JWT refresh token
+ * @returns boolean if the token is our token or not
+ */
+const verifyRefreshToken = async (token: string): Promise<boolean> => {
+  let payload;
+
+  // Verify the token to make sure it is actually a real token
+  try {
+    payload = decryptTokenRefresh(token);
+  } catch {
+    return false;
+  }
+
+  // Check the redis cache for the token
+  const redisRes = await redisClient.get(`token:${payload.uuid}`);
+
+  // If the redis cache is null, then it does not exist
+  if (redisRes === null) return false;
+
+  // They are using an old refreshToken, if this is true, then we deny the user to get another accessToken
+  if (redisRes !== token) return false;
+
+  return true;
+};
+
+export {
+  createToken,
+  createRefreshToken,
+  decryptToken,
+  decryptTokenRefresh,
+  verifyRefreshToken,
+};
