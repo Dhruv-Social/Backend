@@ -2,6 +2,7 @@ import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import http from "http";
+import path from "path";
 import { Server, Socket } from "socket.io";
 import { autoDeleteUsers } from "./core/utilities/deleteUser";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
@@ -44,6 +45,9 @@ import unfollowUser from "./routes/put/unfollowUser";
 import commentOnPost from "./routes/put/commentOnPost";
 import likePost from "./routes/put/likePost";
 import unLikePost from "./routes/put/unLikePost";
+
+// Serve Html
+import verifyEmailHtml from "./routes/html/verifyEmail/verifyEmail";
 
 const app: Application = express();
 const server = http.createServer(app);
@@ -91,6 +95,12 @@ app.use("/dhruvsocial/put/unfollowUser", unfollowUser);
 app.use("/dhruvsocial/put/commentOnPost", commentOnPost);
 app.use("/dhruvsocial/put/likePost", likePost);
 app.use("/dhruvsocial/get/unlikePost", unLikePost);
+
+// Serve Html
+app.use("/dhruvsocial/secure/verifyEmail", verifyEmailHtml);
+
+// Serve static files
+app.use("/static", express.static(path.join(__dirname, "core/email/images")));
 
 app.all("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });

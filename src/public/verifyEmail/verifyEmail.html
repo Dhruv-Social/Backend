@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Email | Dhruv Social</title>
+  </head>
+  <body>
+    <style>
+      body {
+        background-color: #181818;
+        color: #f7f4f3;
+      }
+
+      #form {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        background-color: rgba(86, 77, 74, 0.5);
+
+        border-radius: 2rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        width: 40%;
+        height: 50vh;
+      }
+
+      #form > h1 {
+        font-size: 3rem;
+      }
+
+      #form > button {
+        width: 80%;
+        padding: 0.5rem 1rem;
+
+        font-size: 1.2rem;
+
+        background-color: #5b2333;
+        color: #f7f4f3;
+
+        border: none;
+        border-radius: 2rem;
+
+        cursor: pointer;
+      }
+    </style>
+
+    <form id="form" onsubmit="return false;">
+      <h1>Verify Email</h1>
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      // Run on Start
+      const token = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      }).token;
+
+      /*
+        If the token does not exist, then we rickroll the user for being mean :(
+        like why they have to do that to me.
+        Bro how the fuck dare you try and troll me.
+        I AM THE TROLL MAN. I TROL YOU. NOT THE OTHER WAY AROUND YOU FUCKER.
+        I WILL REVOKE YOUR TOKEN RIGHTS IF YOU DARE AND GIVE ME A BAD TOKEN.
+        NOT ONLY WILL I REVOKE YOUR TOKEN RIGHTS, I'LL REVOKE YOUR BREATHING RIGHTS,
+          KINDA LIKE THAT ONE GUY IN MY ACCOUNTING CLASS.
+      */
+      if (token === "" || token === undefined || token === null)
+        location.href = "https://www.youtube.com/watch?v=xvFZjo5PgG0";
+
+      document.getElementById("form").addEventListener("submit", onFormSubmit);
+
+      const ERROR__CODES = {
+        BAD_REQUEST: 400,
+        SUCCESS: 200,
+      };
+
+      function onFormSubmit() {
+        // Call the API
+        (async () => {
+          var myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+
+          var raw = JSON.stringify({
+            token: token,
+          });
+
+          var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+          };
+
+          let verifyTokenRes = await fetch(
+            "http://localhost:3000/dhruvsocial/post/verifyUser",
+            requestOptions
+          );
+
+          if ((await verifyTokenRes.status) === ERROR__CODES.BAD_REQUEST) {
+            alert("Unable to verify your account, please try again later.");
+            window.close();
+            return;
+          }
+
+          alert("Success!");
+
+          window.close();
+        })();
+      }
+    </script>
+  </body>
+</html>

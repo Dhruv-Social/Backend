@@ -28,6 +28,7 @@ model User {
   profilePicture  String
   banner          String
   creationDate    BigInt
+  publicKey       String
 }
 
 model Post {

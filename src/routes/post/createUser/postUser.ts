@@ -25,6 +25,7 @@ import {
   defaultProfilePicture,
   defaultProfileBackground,
 } from "../../../core/data/data";
+import { verifyEmailHtmlString } from "../../../core/email/html/verifyEmailHtml";
 
 const postUser: Router = express.Router();
 
@@ -151,7 +152,13 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Verify Your Account",
-    text: postUserToken,
+    html: verifyEmailHtmlString
+      .replace("user.token", postUserToken)
+      .replace("host.name", `${req.protocol}://${req.headers.host}`)
+      .replace(
+        "host.longbg",
+        `${req.protocol}://${req.headers.host}/static/DhruvSocialLong.png`
+      ),
   };
 
   // Posting the user to the database

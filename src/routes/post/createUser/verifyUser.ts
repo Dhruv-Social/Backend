@@ -28,10 +28,34 @@ verifyUser.post("/", async (req: Request, res: Response) => {
   try {
     payload = decryptToken(token);
   } catch (err: any) {
-    return res.send({ detail: err });
+    return res
+      .status(PostErrors.verifyUserError().details.errorCode)
+      .send({ detail: err });
   }
 
   const { uuid } = payload;
+
+  // Verify the token.
+  const userCheck = await prisma.user.findUnique({
+    where: {
+      uuid: uuid,
+    },
+    select: {
+      verified: true,
+    },
+  });
+
+  if (userCheck === null) {
+    return res
+      .status(PostErrors.verifyUserError().details.errorCode)
+      .send(PostErrors.verifyUserError());
+  }
+
+  if (userCheck.verified === true) {
+    return res
+      .status(PostErrors.verifyUserError().details.errorCode)
+      .send(PostErrors.verifyUserError());
+  }
 
   // Update the prisma user to verify the user
   await prisma.user.update({

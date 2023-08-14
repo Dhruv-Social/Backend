@@ -76,4 +76,14 @@ export class PostErrors extends Errors {
       },
     };
   }
+
+  static verifyUserError() {
+    return {
+      success: false,
+      details: {
+        reason: "An Error occoured with verifying your account",
+        errorCode: 400,
+      },
+    };
+  }
 }
