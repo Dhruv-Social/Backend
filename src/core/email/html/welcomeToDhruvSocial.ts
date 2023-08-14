@@ -119,7 +119,7 @@ const welcomeToDhruvSocialString = `<!DOCTYPE html>
           opacity: 0;
         "
       >
-        Thank you so much for signing up to Dhruv Banking!
+        Thank you so much for signing up to Dhruv Social!
       </div>
       <!-- end preheader -->
   
