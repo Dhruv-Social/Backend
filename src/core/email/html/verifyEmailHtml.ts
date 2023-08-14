@@ -255,13 +255,13 @@ const verifyEmailHtmlString = `<!DOCTYPE html>
                               target="_blank"
                               rel="noopener noreferrer"
                               style="
-                                border: 3px solid #1a82e2;
+                                border: 3px solid #5b2333;
                                 display: inline-block;
                                 padding: 16px 36px;
                                 font-family: 'Source Sans Pro', Helvetica, Arial,
                                   sans-serif;
                                 font-size: 16px;
-                                color: #1a82e2;
+                                color: #5b2333;
                                 text-decoration: none;
                                 border-radius: 6px;
                               "

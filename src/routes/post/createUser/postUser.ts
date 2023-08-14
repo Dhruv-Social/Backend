@@ -157,7 +157,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
       .replace("host.name", `${req.protocol}://${req.headers.host}`)
       .replace(
         "host.longbg",
-        `${req.protocol}://${req.headers.host}/static/DhruvSocialLong.png`
+        `https://raw.githubusercontent.com/Dhruv-Social/Backend/main/src/core/email/images/DhruvSocialLong.png`
       ),
   };
 
