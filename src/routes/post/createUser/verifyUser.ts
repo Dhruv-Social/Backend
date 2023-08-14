@@ -12,6 +12,7 @@ import { decryptToken } from "../../../core/jwt/jwt";
 import { prisma } from "../../../core/prisma/prisma";
 import { PostErrors } from "../../../core/errors/postErrors";
 import { redisClient } from "../../../core/redis/redis";
+import { welcomeToDhruvSocialString } from "../../../core/email/html/welcomeToDhruvSocial";
 
 const verifyUser: Router = express.Router();
 
@@ -74,14 +75,18 @@ verifyUser.post("/", async (req: Request, res: Response) => {
     },
   });
 
+  if (user === null) {
+    return;
+  }
+
   // Update the Redis Cache
   const updateRedis = {
-    uuid: user?.uuid,
-    profilePicture: user?.profilePicture,
-    displayName: user?.display_name,
+    uuid: user.uuid,
+    profilePicture: user.profilePicture,
+    displayName: user.display_name,
   };
 
-  await redisClient.set(`user:${user?.username}`, JSON.stringify(updateRedis));
+  await redisClient.set(`user:${user.username}`, JSON.stringify(updateRedis));
 
   // Send email to user
   const transporter = nodemailer.createTransport({
@@ -96,7 +101,12 @@ verifyUser.post("/", async (req: Request, res: Response) => {
     from: process.env.EMAIL_USER,
     to: user?.email,
     subject: "Welcome to Dhruv Social",
-    text: "welcome to Dhruv Social",
+    html: welcomeToDhruvSocialString
+      .replace("user.name", user.display_name)
+      .replace(
+        "host.longbg",
+        "https://raw.githubusercontent.com/Dhruv-Social/Backend/main/src/core/email/images/DhruvSocialLong.png"
+      ),
   };
 
   try {
