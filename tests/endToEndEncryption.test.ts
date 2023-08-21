@@ -23,6 +23,7 @@ function generateKeyFiles() {
 }
 
 // Calling Generate keys method
+
 const { publicKey, privateKey } = generateKeyFiles();
 
 // Encrypting the pased string
@@ -63,3 +64,6 @@ console.log();
 
 // Printing the decrypted text
 console.log("Decrypted Text: ", decryptString(encrypted));
+
+console.log(privateKey)
+console.log(publicKey)
