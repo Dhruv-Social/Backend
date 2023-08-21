@@ -42,3 +42,18 @@ model Post {
   text                    String
   media                   String[]
 }
+
+model Chat {
+  chat_uuid       String @id @unique
+  user_one        String
+  user_two        String
+}
+
+model Message {
+  message_uuid     String @id @unique
+  chat_relation    String
+  author           String
+  to               String
+  creatiom_time    BigInt
+  message          String
+}
