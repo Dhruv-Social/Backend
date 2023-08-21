@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 import { ExtendedError } from "socket.io/dist/namespace";
 import { verifyRefreshToken } from "../../core/jwt/jwt";
-import { getUsername } from "../../core/utilities/getUsernameFromToken";
+import { decryptTokenRefresh } from "../../core/jwt/jwt";
 
 const authSocket = async (
   socket: Socket,
@@ -14,10 +14,15 @@ const authSocket = async (
     return next(new Error("Invalid Session Token"));
   }
 
-  // get the username
-  let username = await getUsername(token);
+  let tokenData;
 
-  socket.username = username;
+  try {
+    tokenData = decryptTokenRefresh(token);
+  } catch (err) {
+    return next(new Error("Invalid Session Token"));
+  }
+
+  socket.uuid = tokenData.uuid;
 
   next();
 };
