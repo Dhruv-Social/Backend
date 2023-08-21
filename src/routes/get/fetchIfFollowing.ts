@@ -18,7 +18,9 @@ fetchIfFollowing.get("/", authToken, async (req: Request, res: Response) => {
 
   // If the type of the query parameter is not string, then we know what they provided was null
   if (typeof ifFollowingUuid !== "string") {
-    return res.send("e");
+    return res
+      .status(GetErrors.anItemIsNotAString().details.errorCode)
+      .send(GetErrors.anItemIsNotAString());
   }
 
   // Set an array of items to check

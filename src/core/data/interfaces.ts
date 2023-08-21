@@ -16,6 +16,7 @@ export interface IUser {
   profilePicture: string;
   banner: string;
   creationDate: number;
+  publicKey: string;
 }
 
 export interface IUserString {
@@ -88,4 +89,13 @@ export interface IPostComment {
   authorUuid: string;
   text: string;
   likes: number;
+}
+
+export interface IMessage {
+  message_uuid: string;
+  chat_relation: string;
+  author: string;
+  to: string;
+  creatiom_time: string;
+  message: String;
 }

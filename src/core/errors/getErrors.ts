@@ -64,4 +64,14 @@ export class GetErrors extends Errors {
       },
     };
   }
+
+  static getChatDoesNotExist() {
+    return {
+      success: false,
+      details: {
+        reason: "This user does not exist",
+        errorCode: 400,
+      },
+    };
+  }
 }

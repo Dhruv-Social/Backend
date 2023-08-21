@@ -45,6 +45,7 @@ postUserNoAuth.post(
       password,
       description,
       location,
+      publicKey,
     } = req.body;
 
     // Checking if the images are undefined, if so we just give them the default datas
@@ -68,6 +69,7 @@ postUserNoAuth.post(
       password,
       description,
       location,
+      publicKey,
     ];
 
     if (!verifyArray(arr)) {
@@ -116,6 +118,7 @@ postUserNoAuth.post(
       profilePicture: profilePicture,
       banner: banner,
       creationDate: Date.now(),
+      publicKey: publicKey,
     };
 
     // Checking to make sure the the user with that username does exist, if so, we return an error
@@ -152,6 +155,7 @@ postUserNoAuth.post(
         profilePicture: user.profilePicture,
         banner: user.banner,
         creationDate: user.creationDate,
+        publicKey: user.publicKey,
       },
     });
 

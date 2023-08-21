@@ -44,17 +44,26 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     password,
     description,
     location,
+    publicKey,
   } = req.body;
 
-  // Checking if the images are undefined, if so we just give them the default data
-  const profilePicture: string =
-    req.files.profilePicture !== undefined
-      ? req.files.profilePicture.data.toString("base64")
-      : defaultProfilePicture;
-  const banner =
-    req.files.banner !== undefined
-      ? req.files.banner.data.toString("base64")
-      : defaultProfileBackground;
+  let profilePicture: string;
+  let banner: string;
+
+  if (req.files === null) {
+    profilePicture = defaultProfilePicture;
+    banner = defaultProfileBackground;
+  } else {
+    profilePicture =
+      req.files.profilePicture !== undefined &&
+      req.files.profilePicture !== null
+        ? req.files.profilePicture.data.toString("base64")
+        : defaultProfilePicture;
+    banner =
+      req.files.banner !== undefined && req.files.banner !== null
+        ? req.files.banner.data.toString("base64")
+        : defaultProfileBackground;
+  }
 
   // Here we verifying the data, if it is not correct then we return an error to the user.w
   const arr: string[] = [
@@ -115,6 +124,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
     profilePicture: profilePicture,
     banner: banner,
     creationDate: Date.now(),
+    publicKey: publicKey,
   };
 
   // Checking to make sure the the user with that username does exist, if so, we return an error
@@ -181,6 +191,7 @@ postUser.post("/", fileUpload(), async (req: Request | any, res: Response) => {
       profilePicture: user.profilePicture,
       banner: user.banner,
       creationDate: user.creationDate,
+      publicKey: user.publicKey,
     },
   });
 

@@ -9,7 +9,7 @@ const authSocket = async (
 ) => {
   let token = socket.handshake.auth.token;
 
-  // verify token
+  // Verify token
   if (!(await verifyRefreshToken(token))) {
     return next(new Error("Invalid Session Token"));
   }

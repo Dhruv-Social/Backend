@@ -13,7 +13,7 @@
     "strict": true
     //        "skipLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/core/types/**/*.d.ts"],
   "exclude": ["src/public"],
   "ts-node": {
     "files": true
