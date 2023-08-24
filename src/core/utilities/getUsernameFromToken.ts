@@ -1,6 +1,12 @@
+// Local imports
 import { decryptTokenRefresh } from "../jwt/jwt";
 import { prisma } from "../prisma/prisma";
 
+/**
+ * Function to Get Username from their token
+ * @param User Token
+ * @returns username
+ */
 const getUsername = async (token: string) => {
   let payload = decryptTokenRefresh(token);
 

@@ -64,3 +64,6 @@ let test_verifyLocation = (city: string): boolean => {
       city.toLocaleLowerCase().slice(1)
   );
 };
+
+console.log(test_verifyUsername("dhruvayat"));
+console.log(test_verifyUsername("dhruv rayat !@*&^#"));

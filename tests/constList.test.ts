@@ -1,4 +1,4 @@
-const yes = [];
+const yes: string[] = [];
 
 yes.push("e");
 
