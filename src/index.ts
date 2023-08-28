@@ -4,11 +4,12 @@ import express, { Request, Response, Application } from "express";
 import cors from "cors";
 import http from "http";
 import path from "path";
-import { Server, Socket } from "socket.io";
+
+import { Server } from "socket.io";
 import { autoDeleteUsers } from "./core/utilities/deleteUser";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { authSocket } from "./sockets/middleware/auth";
-import { prisma } from "./core/prisma/prisma";
+
+import onConnection from "./sockets/sockets/connect";
 
 // Import Routes
 // Auth
@@ -49,7 +50,6 @@ import unLikePost from "./routes/put/unLikePost";
 
 // Serve Html
 import verifyEmailHtml from "./routes/html/verifyEmail/verifyEmail";
-import { Chat } from "@prisma/client";
 
 const app: Application = express();
 const server = http.createServer(app);
@@ -57,7 +57,6 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
 const port: number = parseInt(process.env.API_PORT!);
-const devMode: boolean = process.env.DEV_MODE === "true" ? true : false;
 
 app.use(express.json());
 app.use(cors());
@@ -111,194 +110,7 @@ app.all("/", async (_: Request, res: Response) => {
 
 io.use(authSocket);
 
-interface privateMessageType {
-  to: string;
-  message: string;
-}
-
-export interface IChatSmall {
-  chatUuid: String;
-  userUuid: String;
-  profilePicture: String;
-  displayName: String;
-}
-
-let connectedUsers: {
-  [key: string]: Socket<
-    DefaultEventsMap,
-    DefaultEventsMap,
-    DefaultEventsMap,
-    any
-  >;
-} = {};
-
-io.on("connection", async (socket) => {
-  connectedUsers[socket.uuid] = socket;
-
-  // When they connect to the socket, we want to send their chat's to them
-  const chatsUserIsIn = await prisma.chat.findMany({
-    where: {
-      OR: [
-        {
-          user_one: socket.uuid,
-        },
-        {
-          user_two: socket.uuid,
-        },
-      ],
-    },
-  });
-
-  let chats = [...chatsUserIsIn];
-
-  for (let i = 0; i < chats.length; i++) {
-    for (const key in chats[i]) {
-      if ((chats[i] as any)[key] === socket.uuid) {
-        delete (chats[i] as any)[key];
-      }
-    }
-  }
-
-  let formattedData: IChatSmall[] = [];
-
-  // Get the user data
-  for (let i = 0; i < chats.length; i++) {
-    const user = await prisma.user.findUnique({
-      where: {
-        uuid: chats[i].user_one ?? chats[i].user_two,
-      },
-      select: {
-        display_name: true,
-        profilePicture: true,
-        uuid: true,
-      },
-    });
-
-    if (user === null) {
-      return console.error("an unknown error has occoured");
-    }
-
-    formattedData.push({
-      chatUuid: chats[i].chat_uuid,
-      userUuid: user.uuid,
-      profilePicture: user.profilePicture,
-      displayName: user.display_name,
-    });
-  }
-
-  connectedUsers[socket.uuid].emit("chats", formattedData);
-
-  socket.on("message", async (message: privateMessageType) => {
-    // Check if they are not in the chat
-    const areInChat = await prisma.chat.findMany({
-      where: {
-        OR: [
-          {
-            AND: [
-              {
-                user_one: socket.uuid,
-              },
-              {
-                user_two: message.to,
-              },
-            ],
-          },
-          {
-            AND: [
-              {
-                user_one: message.to,
-              },
-              {
-                user_two: socket.uuid,
-              },
-            ],
-          },
-        ],
-      },
-    });
-
-    // Then we know they are not in chat and we should add them
-    if (areInChat.length === 0) {
-      let chatUuid = crypto.randomUUID();
-
-      // Create Chat
-      await prisma.chat.create({
-        data: {
-          chat_uuid: chatUuid,
-          user_one: socket.uuid,
-          user_two: message.to,
-        },
-      });
-
-      // Add message to message table
-      await prisma.message.create({
-        data: {
-          message_uuid: crypto.randomUUID(),
-          chat_relation: chatUuid,
-          author: socket.uuid,
-          to: message.to,
-          creatiom_time: Date.now(),
-          message: message.message,
-        },
-      });
-    } else {
-      // get the their chat uuid
-      const chatUuid = await prisma.chat.findMany({
-        where: {
-          OR: [
-            {
-              AND: [
-                {
-                  user_one: socket.uuid,
-                },
-                {
-                  user_two: message.to,
-                },
-              ],
-            },
-            {
-              AND: [
-                {
-                  user_one: message.to,
-                },
-                {
-                  user_two: socket.uuid,
-                },
-              ],
-            },
-          ],
-        },
-      });
-
-      const uuid = chatUuid[0].chat_uuid;
-
-      // Create a new message item
-      await prisma.message.create({
-        data: {
-          message_uuid: crypto.randomUUID(),
-          chat_relation: uuid,
-          author: socket.uuid,
-          to: message.to,
-          creatiom_time: Date.now(),
-          message: message.message,
-        },
-      });
-    }
-
-    // Send the message to the other person if they are connected to the socket
-    if (connectedUsers[message.to] !== undefined) {
-      connectedUsers[message.to].emit("privateMessage", {
-        from: socket.uuid,
-        to: connectedUsers[message.to].uuid,
-        message: message.message,
-      });
-    }
-  });
-
-  socket.on("disconnect", () => {
-    delete connectedUsers[socket.uuid];
-  });
-});
+io.on("connection", onConnection);
 
 // Fallback
 app.all("*", async (req: Request, res: Response) => {
@@ -312,3 +124,5 @@ server.listen(port, async () => {
   console.log(`Listening on port ${port}`);
   await autoDeleteUsers();
 });
+
+export { io };
