@@ -103,6 +103,7 @@ app.use("/dhruvsocial/secure/verifyEmail", verifyEmailHtml);
 
 // Serve static files
 app.use("/static", express.static(path.join(__dirname, "core/email/images")));
+app.use("/reels", express.static(path.join(__dirname, "public/capybara")));
 
 app.all("/", async (_: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Social API" });

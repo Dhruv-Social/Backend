@@ -123,7 +123,9 @@ createPost.post(
     });
 
     // Return successs
-    return res.send("success!");
+    return res.status(201).send({
+      success: true,
+    });
   }
 );
 

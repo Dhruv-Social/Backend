@@ -4,7 +4,6 @@ import path from "path";
 import fs from "fs";
 
 // Local imports
-import { GetErrors } from "../../core/errors/getErrors";
 import { authToken } from "../../core/auth/auth";
 
 const reels: Router = express.Router();
@@ -12,28 +11,21 @@ const reels: Router = express.Router();
 /* 
   Endpoint to get reels for a user 
 */
-reels.get("/", authToken, async (req: Request, res: Response) => {
-  // Read the directory
-  fs.readdir(
-    path.join(`${process.cwd()}/src/public/capybara`),
-    (err, files) => {
-      if (err) {
-        return res
-          .status(GetErrors.reelsError().details.errorCode)
-          .send(GetErrors.reelsError());
-      }
+reels.get("/", async (req: Request, res: Response) => {
+  // set variable for reels
+  let reels = [
+    "http://localhost:3000/reels/racism.webm",
+    "http://localhost:3000/reels/capybara.webm",
+    "http://localhost:3000/reels/cat.webm",
+  ];
 
-      // Valyes
-      const max = files.length - 1;
-      const min = 0;
+  const randomNumber = Math.floor(Math.random() * (3 - 1) + 1);
 
-      // Find get a random number
-      const index = Math.round(Math.random() * (max - min) + min);
+  console.log(randomNumber);
 
-      // Send the file
-      res.sendFile(`${process.cwd()}/src/public/capybara/${files[index]}`);
-    }
-  );
+  return res.send({
+    reelUrl: reels[randomNumber],
+  });
 });
 
 export default reels;
