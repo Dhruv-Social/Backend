@@ -5,6 +5,16 @@ export class AuthErrors extends Errors {
     super();
   }
 
+  static authUserNotVerified() {
+    return {
+      success: false,
+      details: {
+        reason: "You are not verified",
+        errorCode: 400,
+      },
+    };
+  }
+
   static authUserDoesNotExist() {
     return {
       success: false,

@@ -59,6 +59,7 @@ loginAuth.post("/", async (req: Request | any, res: Response) => {
     select: {
       password: true,
       uuid: true,
+      verified: true,
     },
   });
 
@@ -67,6 +68,13 @@ loginAuth.post("/", async (req: Request | any, res: Response) => {
     return res
       .status(AuthErrors.authUserDoesNotExist().details.errorCode)
       .send(AuthErrors.authUserDoesNotExist());
+  }
+
+  // if they are not verified, then we return an error
+  if (!prismaReturn.verified) {
+    return res
+      .status(AuthErrors.authUserNotVerified().details.errorCode)
+      .send(AuthErrors.authUserNotVerified());
   }
 
   // If the verify password function returns false, then we know that provided the wrong password
