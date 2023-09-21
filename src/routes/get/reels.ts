@@ -1,7 +1,5 @@
 // Express
 import express, { Request, Response, Router } from "express";
-import path from "path";
-import fs from "fs";
 
 // Local imports
 import { authToken } from "../../core/auth/auth";
@@ -19,7 +17,10 @@ reels.get("/", async (req: Request, res: Response) => {
     "http://localhost:3000/reels/cat.webm",
   ];
 
-  const randomNumber = Math.floor(Math.random() * (3 - 1) + 1);
+  const max = 3;
+  const min = 0;
+
+  const randomNumber = Math.floor(Math.random() * (max - min) + min);
 
   console.log(randomNumber);
 
